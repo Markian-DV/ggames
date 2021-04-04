@@ -1,0 +1,78 @@
+﻿using ggames.Models;
+using ggames.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ggames.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+
+        [Route("register")]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterModel registerModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new 
+                {
+                    Errors = ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage))
+                });
+            }
+
+            var authResponse = await _authService.RegisterAsync(registerModel.Email, registerModel.Password, registerModel.UserName);
+            if (!authResponse.Success)
+            {
+                return BadRequest(new 
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+            return Ok(new 
+            {
+                Token = authResponse.Token
+            });
+
+        }
+
+        [Route("login")]
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel loginModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Errors = ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage))
+                });
+            }
+
+            var authResponse = await _authService.LoginAsync(loginModel.Email, loginModel.Password);
+            if (!authResponse.Success)
+            {
+                return BadRequest(new 
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+            return Ok(new 
+            {
+                Token = authResponse.Token
+            });
+        }
+
+    }
+}
