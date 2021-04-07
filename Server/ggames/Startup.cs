@@ -41,7 +41,9 @@ namespace ggames
             services.AddDbContext<AppDataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
 
-            services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDataContext>();
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDataContext>();
 
             //jwt
             var jwtSettings = new JwtSettings();
