@@ -25,6 +25,7 @@ namespace ggames.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
+            if (registerModel == null) return BadRequest();
             if (!ModelState.IsValid)
             {
                 return BadRequest(new 
@@ -52,6 +53,7 @@ namespace ggames.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
+            if (loginModel == null) return BadRequest();
             if (!ModelState.IsValid)
             {
                 return BadRequest(new
