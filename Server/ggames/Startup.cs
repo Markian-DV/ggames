@@ -39,6 +39,7 @@ namespace ggames
 
             
             services.AddDbContext<AppDataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
 
             services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDataContext>();
 
