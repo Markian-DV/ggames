@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ggames.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,9 +51,20 @@ namespace ggames.Controllers
             var user = await _userManager.FindByIdAsync(Id.ToString());
             if (user == null) { return NotFound(); }
             var deleted = await _userManager.DeleteAsync(user);
-            //await _dataContext.SaveChangesAsync();
             if (deleted.Succeeded) return NoContent();
             else return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAdmin([FromBody] UpdateToAdminModel updateToAdmimModel)
+        {
+            var user = await _userManager.FindByEmailAsync(updateToAdmimModel.Email);
+
+            if (user == null) return NotFound();
+
+            await _userManager.AddToRoleAsync(user, "Admin");
+
+            return Ok(user);
         }
 
     }

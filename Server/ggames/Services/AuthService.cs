@@ -114,7 +114,7 @@ namespace ggames.Services
                 }
             }
 
-            //claims.AddRange(userClaims);
+            
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
