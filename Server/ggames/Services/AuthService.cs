@@ -48,11 +48,11 @@ namespace ggames.Services
                 return new AuthResult
                 {
                     Errors = new[] { "Password is wrong" },
-                    Success= false
+                    Success = false
                 };
             }
 
-            return GenerateAuthenticationResultForUser(user);
+            return await GenerateAuthenticationResultForUserAsync(user);
         }
 
         public async Task<AuthResult> RegisterAsync(string email, string password, string username)
@@ -64,7 +64,7 @@ namespace ggames.Services
                 {
                     Errors = new[] { "User with this email address already exists" },
                     Success = false
-                    
+
                 };
 
             }
@@ -84,25 +84,41 @@ namespace ggames.Services
                     Success = false
                 };
             }
-            return GenerateAuthenticationResultForUser(newUser);
+            
+            return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 
 
 
 
-        private AuthResult GenerateAuthenticationResultForUser(IdentityUser newUser)
+        private async Task<AuthResult> GenerateAuthenticationResultForUserAsync(IdentityUser User)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+
+            var claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub,User.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Email,User.Email),
+                    
+                    new Claim("id", User.Id)
+                };
+
+            var userRoles = await _userManager.GetRolesAsync(User);
+            if(userRoles.Count>0)
+            {
+                foreach(var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+            }
+
+            //claims.AddRange(userClaims);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub,newUser.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email,newUser.Email),
-                    new Claim("id", newUser.Id)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 

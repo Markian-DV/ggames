@@ -1,5 +1,6 @@
 using ggames.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,35 @@ namespace ggames
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDataContext>();
 
                 await dbContext.Database.MigrateAsync();
+
+
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                if(! await roleManager.RoleExistsAsync("Admin"))
+                {
+                    var AdminRole = new IdentityRole("Admin");
+                    await roleManager.CreateAsync(AdminRole);
+                }
+                if (!await roleManager.RoleExistsAsync("User"))
+                {
+                    var UserRole = new IdentityRole("User");
+                    await roleManager.CreateAsync(UserRole);
+                }
+
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                if(await userManager.FindByEmailAsync("admin@test.com")==null)
+                {
+                    var newUser = new IdentityUser
+                    {
+                        Id = "0aea6483-9e45-4993-874d-4de5b3a58276",
+                        Email = "admin@test.com",
+                        UserName = "admin",                    
+                    };
+
+                    //0aea6483-9e45-4993-874d-4de5b3a58276
+                    await userManager.CreateAsync(newUser, "123Hello_World!!!");
+                    await userManager.AddToRoleAsync(newUser, "admin");
+                }
+
             }
 
 
