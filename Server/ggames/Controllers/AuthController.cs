@@ -1,4 +1,5 @@
-﻿using ggames.Models;
+﻿using ggames.Helpers;
+using ggames.Models;
 using ggames.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ggames.Controllers
 {
-    [Route("api/[controller]")]
+ 
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -21,7 +22,7 @@ namespace ggames.Controllers
         }
 
 
-        [Route("register")]
+        [Route(ApiRoutes.Auth.Register)]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
@@ -49,7 +50,7 @@ namespace ggames.Controllers
 
         }
 
-        [Route("login")]
+        [Route(ApiRoutes.Auth.Login)]
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {

@@ -1,4 +1,5 @@
-﻿using ggames.Models;
+﻿using ggames.Helpers;
+using ggames.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ggames.Controllers
 {
-    [Route("api/[controller]")]
+
     [ApiController]
     [Authorize(Roles ="Admin")]
     public class UsersController : ControllerBase
@@ -22,7 +23,7 @@ namespace ggames.Controllers
             _userManager = userManager;
         }
 
-
+        [Route(ApiRoutes.Users.GetAll)]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -30,7 +31,9 @@ namespace ggames.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{Id}")]
+
+        [Route(ApiRoutes.Users.GetById)]
+        [HttpGet]
         public async Task<IActionResult> GetUserById([FromRoute]Guid Id)
         {
             var user = await _userManager.FindByIdAsync(Id.ToString());
@@ -43,8 +46,8 @@ namespace ggames.Controllers
                 return NotFound();
             }
         }
-
-        [HttpDelete("{Id}")]
+        [Route(ApiRoutes.Users.Delete)]
+        [HttpDelete]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
         {
 
@@ -55,6 +58,7 @@ namespace ggames.Controllers
             else return NotFound();
         }
 
+        [Route(ApiRoutes.Users.AddAdmin)]
         [HttpPost]
         public async Task<IActionResult> AddAdmin([FromBody] UpdateToAdminModel updateToAdmimModel)
         {
