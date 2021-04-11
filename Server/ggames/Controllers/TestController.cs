@@ -16,7 +16,7 @@ namespace ggames.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return Ok("hello world");
+            return Ok("hello my little world");
         }
     }
 }
