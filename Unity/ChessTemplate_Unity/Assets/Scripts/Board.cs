@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
+using Photon.Pun;
+using Photon.Realtime;
 // New
 public enum CellState
 {
@@ -12,15 +13,22 @@ public enum CellState
     OutOfBounds
 }
 
-public class Board : MonoBehaviour
+public class Board : MonoBehaviourPunCallbacks
+
 {
     public GameObject mCellPrefab;
+    public PhotonView photonView;
+    
 
-    [HideInInspector]
     public Cell[,] mAllCells = new Cell[8, 8];
 
+    private void Start()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
     public void Create()
     {
+        
         #region Create
         for (int y = 0; y < 8; y++)
         {
@@ -93,4 +101,18 @@ public class Board : MonoBehaviour
             }
         }
     }
+    public void SendMove(string sendRes)
+    {
+        
+        photonView.RPC("CallEndMove", RpcTarget.AllBuffered);
+
+    }
+
+    [PunRPC]
+    public void CallEndMove()
+    {
+        PieceManager.EndMove();
+    }
+
+
 }

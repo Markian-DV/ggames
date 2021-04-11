@@ -1,10 +1,15 @@
-﻿using System;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System;
 
-public class PieceManager : MonoBehaviour
+public class PieceManager : MonoBehaviourPunCallbacks
 {
-    [HideInInspector]
+    private PhotonView photonView;
     public bool mAreKingsAlive = true;
 
     public GameObject mPiecePrefab;
@@ -28,9 +33,10 @@ public class PieceManager : MonoBehaviour
         {"K",  typeof(King)},
         {"Q",  typeof(Queen)}
     };
-
+    
     public void Setup(Board board)
     {
+        photonView = GetComponent<PhotonView>();
         // Create white pieces
         mWhitePieces = CreatePieces(Color.white, new Color32(80, 124, 159, 255));
 
@@ -99,8 +105,8 @@ public class PieceManager : MonoBehaviour
         foreach (BasePiece piece in allPieces)
             piece.enabled = value;
     }
-
     
+
     private void MoveRandomPiece()
     {
         BasePiece finalPiece = null;
@@ -118,13 +124,14 @@ public class PieceManager : MonoBehaviour
         }
         finalPiece.ComputerMove();
     }
-
-    public void EndMove(string movement)
+    
+    public static void EndMove()
     {
-        string prev = "";
-        string next = "";
+        Debug.Log("123");
         
     }
+   
+
 
     public void SwitchSides(Color color)
     {
