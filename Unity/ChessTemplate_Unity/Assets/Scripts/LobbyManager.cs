@@ -36,11 +36,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions { MaxPlayers = 2 });
         DataManager.isPlayerWhite = true;
+        DataManager.isPlayerBlack = true;
     }
 
     public void JoinRandomRoom()
     {
         PhotonNetwork.JoinRandomRoom();
+        DataManager.isPlayerBlack = true;
     }
 
     public void JoinRoom()

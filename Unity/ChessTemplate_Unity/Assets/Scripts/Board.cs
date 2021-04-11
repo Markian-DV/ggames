@@ -104,14 +104,14 @@ public class Board : MonoBehaviourPunCallbacks
     public void SendMove(string sendRes)
     {
         
-        photonView.RPC("CallEndMove", RpcTarget.AllBuffered);
+        photonView.RPC("CallEndMove", RpcTarget.Others, sendRes);
 
     }
 
     [PunRPC]
-    public void CallEndMove()
+    public void CallEndMove(string sendRes)
     {
-        PieceManager.EndMove();
+        PieceManager.EndMove(sendRes, this);
     }
 
 

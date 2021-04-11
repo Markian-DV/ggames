@@ -14,16 +14,18 @@ public abstract class BasePiece : EventTrigger
     public Color mColor = Color.clear;
     public bool mIsFirstMove = true;
 
-    protected Cell mOriginalCell = null;
-    protected Cell mCurrentCell = null;
+    public Cell mOriginalCell = null;
+    public Cell mCurrentCell = null;
+    public Cell mPreviousCell = null;
 
     protected RectTransform mRectTransform = null;
-    protected PieceManager mPieceManager;
+    public PieceManager mPieceManager;
 
-    protected Cell mTargetCell = null;
+    public Cell mTargetCell = null;
 
     protected Vector3Int mMovement = Vector3Int.one;
     public List<Cell> mHighlightedCells = new List<Cell>();
+    public List<Cell> mHighlightedCells2 = new List<Cell>();
     List<Cell> attackList = new List<Cell>();
 
     public virtual void Setup(Color newTeamColor, Color32 newSpriteColor, PieceManager newPieceManager)
@@ -94,14 +96,8 @@ public abstract class BasePiece : EventTrigger
     }
 
     #region Movement
-    private void CreateCellPath(int xDirection, int yDirection, int movement, int t)
+    private void CreateCellPathCheck(int xDirection, int yDirection, int movement)
     {
-
-        if (t == 0)
-        {
-            attackList = mPieceManager.CheckCheck();
-        }
-
         // Target position
         int currentX = mCurrentCell.mBoardPosition.x;
         int currentY = mCurrentCell.mBoardPosition.y;
@@ -116,103 +112,147 @@ public abstract class BasePiece : EventTrigger
             CellState cellState = CellState.None;
             cellState = mCurrentCell.mBoard.ValidateCell(currentX, currentY, this);
 
-            if (t == 1 || attackList.Count < 1)
+            // If enemy, add to list, break
+            if (cellState == CellState.Enemy)
             {
-                // If enemy, add to list, break
-                if (cellState == CellState.Enemy)
-                {
-                    mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
-                    break;
-                }
-
-                // If the cell is not free, break
-                if (cellState != CellState.Free)
-                    break;
-
-                // Add to list
-                mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
+                mHighlightedCells2.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
+                break;
             }
-            else if (mCurrentCell.mCurrentPiece.GetType().Name == "King")
-            {
-                if (cellState != CellState.Free)
-                    break;
 
-                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].isAttack == false)
-                {
+            // If the cell is not free, break
+            if (cellState != CellState.Free)
+                break;
 
-
-                    // If enemy, add to list, break
-                    if (cellState == CellState.Enemy)
-                    {
-                        mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
-                        break;
-                    }
-
-                    // If the cell is not free, break
-                    if (cellState != CellState.Free)
-                        break;
-
-                    // Add to list
-                    mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
-                }
-            }
-            else
-            {
-
-                if (cellState != CellState.Free)
-                {
-                    break;
-                }
-
-                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].isAttack == true)
-                {
-                    mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
-                    break;
-                }
-            }
+            // Add to list
+            mHighlightedCells2.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
         }
     }
 
-    public virtual void CheckPathing(int t)
+    private void CreateCellPath(int xDirection, int yDirection, int movement)
+    {
+        // Target position
+        int originalX = mCurrentCell.mBoardPosition.x;
+        int originalY = mCurrentCell.mBoardPosition.y;
+
+        int currentX = mCurrentCell.mBoardPosition.x;
+        int currentY = mCurrentCell.mBoardPosition.y;
+
+        // Check each cell
+        for (int i = 1; i <= movement; i++)
+        {
+            currentX += xDirection;
+            currentY += yDirection;
+
+            // Get the state of the target cell
+            CellState cellState = CellState.None;
+            cellState = mCurrentCell.mBoard.ValidateCell(currentX, currentY, this);
+
+            // Check
+
+            if (cellState != CellState.OutOfBounds)
+            {
+
+                mCurrentCell.mBoard.mAllCells[currentX, currentY].mPreviousPiece = mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece;
+
+                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece != null)
+                {
+                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.x = -20;
+                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.y = -20;
+                }
+                mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece = this;
+
+                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece.mCurrentCell.mBoardPosition.x = -20;
+                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece.mCurrentCell.mBoardPosition.y = -20;
+                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece = null;
+
+                mCurrentCell.mBoardPosition.x = currentX;
+                mCurrentCell.mBoardPosition.y = currentY;
+                mCurrentCell.mCurrentPiece = this;
+
+                int checkRes = mPieceManager.CheckCheck();
+
+                mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece = mCurrentCell.mBoard.mAllCells[currentX, currentY].mPreviousPiece;
+
+                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece != null)
+                {
+                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.x = currentX;
+                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.y = currentY;
+                }
+
+                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece = this;
+                mCurrentCell.mBoardPosition.x = originalX;
+                mCurrentCell.mBoardPosition.y = originalY;
+                mCurrentCell.mCurrentPiece = this;
+
+
+                if ((checkRes == 1 && mColor == Color.black) || checkRes == 2)
+                {
+                    Debug.Log("Hello" + currentX + " " + currentY);
+                    continue;
+                }
+                else if ((checkRes == 0 && mColor == Color.white) || checkRes == 2)
+                {
+                    Debug.Log("Wrong" + currentX + " " + currentY);
+                    continue;
+                }
+
+
+            }
+
+            // If enemy, add to list, break
+            if (cellState == CellState.Enemy)
+            {
+                mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
+                break;
+            }
+
+            Debug.Log("--Here " + currentX + " " + currentY + " " + cellState);
+            // If the cell is not free, break
+            if (cellState != CellState.Free)
+                break;
+            Debug.Log("--Break " + currentX + " " + currentY);
+            // Add to list
+            mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
+        }
+    }
+
+    public virtual void CheckPathing(int t = 0)
     {
         if (t == 1)
         {
             // Horizontal
-            CreateCellPath(1, 0, mMovement.x, t);
-            CreateCellPath(-1, 0, mMovement.x, t);
+            CreateCellPathCheck(1, 0, mMovement.x);
+            CreateCellPathCheck(-1, 0, mMovement.x);
 
             // Vertical 
-            CreateCellPath(0, 1, mMovement.y, t);
-            CreateCellPath(0, -1, mMovement.y, t);
+            CreateCellPathCheck(0, 1, mMovement.y);
+            CreateCellPathCheck(0, -1, mMovement.y);
 
             // Upper diagonal
-            CreateCellPath(1, 1, mMovement.z, t);
-            CreateCellPath(-1, 1, mMovement.z, t);
+            CreateCellPathCheck(1, 1, mMovement.z);
+            CreateCellPathCheck(-1, 1, mMovement.z);
 
             // Lower diagonal
-            CreateCellPath(-1, -1, mMovement.z, t);
-            CreateCellPath(1, -1, mMovement.z, t);
+            CreateCellPathCheck(-1, -1, mMovement.z);
+            CreateCellPathCheck(1, -1, mMovement.z);
         }
         else
         {
             // Horizontal
-            CreateCellPath(1, 0, mMovement.x, 0);
-            CreateCellPath(-1, 0, mMovement.x, 2);
+            CreateCellPath(1, 0, mMovement.x);
+            CreateCellPath(-1, 0, mMovement.x);
 
             // Vertical 
-            CreateCellPath(0, 1, mMovement.y, 2);
-            CreateCellPath(0, -1, mMovement.y, 2);
+            CreateCellPath(0, 1, mMovement.y);
+            CreateCellPath(0, -1, mMovement.y);
 
             // Upper diagonal
-            CreateCellPath(1, 1, mMovement.z, 2);
-            CreateCellPath(-1, 1, mMovement.z, 2);
+            CreateCellPath(1, 1, mMovement.z);
+            CreateCellPath(-1, 1, mMovement.z);
 
             // Lower diagonal
-            CreateCellPath(-1, -1, mMovement.z, 2);
-            CreateCellPath(1, -1, mMovement.z, 2);
-
-            mCurrentCell.mBoard.unSetAllAttack();
-            attackList = new List<Cell>();
+            CreateCellPath(-1, -1, mMovement.z);
+            CreateCellPath(1, -1, mMovement.z);
         }
     }
 
@@ -230,14 +270,30 @@ public abstract class BasePiece : EventTrigger
         mHighlightedCells.Clear();
     }
 
-    protected virtual void Move()
+    public virtual void MoveEnemy()
+    {
+        // If there is an enemy piece, remove it
+        mTargetCell.RemovePiece();
+
+        // Clear current
+        mCurrentCell.mCurrentPiece = null;
+
+        // Switch cells
+        mCurrentCell = mTargetCell;
+        mCurrentCell.mCurrentPiece = this;
+
+        // Move on board
+        transform.position = mCurrentCell.transform.position;
+        mTargetCell = null;
+    }
+
+    public virtual void Move()
     {
         // First move switch
         mIsFirstMove = false;
 
-        string sendRes = mCurrentCell.mBoardPosition.x + "-" + mCurrentCell.mBoardPosition.y;
-        sendRes += " " + mTargetCell.mBoardPosition.x + "-" + mTargetCell.mBoardPosition.y;
-        Connector(sendRes);
+        string sendRes = (7 - mCurrentCell.mBoardPosition.x) + "-" + (7 - mCurrentCell.mBoardPosition.y);
+        sendRes += " " + (7 - mTargetCell.mBoardPosition.x) + "-" + (7 - mTargetCell.mBoardPosition.y);
 
         // If there is an enemy piece, remove it
         mTargetCell.RemovePiece();
@@ -252,7 +308,10 @@ public abstract class BasePiece : EventTrigger
         // Move on board
         transform.position = mCurrentCell.transform.position;
         mTargetCell = null;
-    }                              
+
+        Connector(sendRes);
+    }
+    
     public void Connector(string sendRes) 
     {
         mCurrentCell.mBoard.SendMove(sendRes);

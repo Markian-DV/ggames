@@ -14,6 +14,7 @@ public class Cell : MonoBehaviour
 
     [HideInInspector]
     public BasePiece mCurrentPiece = null;
+    public BasePiece mPreviousPiece = null;
 
     [HideInInspector]
     public bool isAttack = false;

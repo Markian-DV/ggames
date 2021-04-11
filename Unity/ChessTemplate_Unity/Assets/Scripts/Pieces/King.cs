@@ -35,7 +35,7 @@ public class King : BasePiece
         mLeftRook = GetRook(-1, 4);
     }
 
-    protected override void Move()
+    public override void Move()
     {
         // Base move
         base.Move();

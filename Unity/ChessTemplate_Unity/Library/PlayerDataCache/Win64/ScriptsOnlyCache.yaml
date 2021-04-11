@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - CustomCursor
     - GameManager
     - LobbyManager
+    - NetworkManager
     - PieceManager
     - UnityEngine.PostProcessing.PostProcessingBehaviour
     - UnityEngine.PostProcessing.PostProcessingProfile
@@ -60,18 +61,28 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 20
       Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
     - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 11336}
+    - Class: 114
+      Script: {instanceID: 11338}
+    - Class: 114
       Script: {instanceID: 11342}
     - Class: 114
       Script: {instanceID: 11344}
     - Class: 114
       Script: {instanceID: 11374}
+    - Class: 114
+      Script: {instanceID: 11576}
     - Class: 114
       Script: {instanceID: 11860}
     - Class: 114
@@ -95,6 +106,8 @@ ScriptsOnlyBuild:
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -300,7 +313,7 @@ ScriptsOnlyBuild:
     className: SmoothSyncMovement
   - hash:
       serializedVersion: 2
-      Hash: ea40a51af275ea489f6f4f53ace4b69f
+      Hash: f056def866415d043da764bbb5c38941
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Queen
@@ -522,7 +535,7 @@ ScriptsOnlyBuild:
     className: BezierSpline
   - hash:
       serializedVersion: 2
-      Hash: ea40a51af275ea489f6f4f53ace4b69f
+      Hash: f056def866415d043da764bbb5c38941
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: King
@@ -606,7 +619,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: cc92d0103267ddbd498fad3d171f37c5
+      Hash: 7a383d6515995fc1075a9befc5145fd4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Rook
@@ -798,7 +811,7 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: ea40a51af275ea489f6f4f53ace4b69f
+      Hash: f056def866415d043da764bbb5c38941
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Pawn
@@ -888,7 +901,7 @@ ScriptsOnlyBuild:
     className: CurrentRoomIsOpenToggle
   - hash:
       serializedVersion: 2
-      Hash: ea40a51af275ea489f6f4f53ace4b69f
+      Hash: f056def866415d043da764bbb5c38941
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Knight
@@ -918,7 +931,7 @@ ScriptsOnlyBuild:
     className: ScrollRect
   - hash:
       serializedVersion: 2
-      Hash: 91ede842504da57b49c511db18ec764e
+      Hash: 7ad3e1f57e670b0b6c0fa4119d6ba226
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PieceManager
@@ -1452,7 +1465,7 @@ ScriptsOnlyBuild:
     className: ProceduralController
   - hash:
       serializedVersion: 2
-      Hash: ea40a51af275ea489f6f4f53ace4b69f
+      Hash: f056def866415d043da764bbb5c38941
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Bishop
@@ -1608,7 +1621,7 @@ ScriptsOnlyBuild:
     className: CurrentRoomAutoCleanupProperty
   - hash:
       serializedVersion: 2
-      Hash: fe2251e8b3af730f18c88933118678cd
+      Hash: 6906791d96aa522353ae7bd798be798c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Cell
@@ -1826,4 +1839,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/Lobby.unity
   - Assets/Scenes/Game.unity
-  playerPath: D:/ChessBuild/CanvasChess_Unity.exe
+  playerPath: D:/UnityFiles/Check_chess/CanvasChess_Unity.exe
