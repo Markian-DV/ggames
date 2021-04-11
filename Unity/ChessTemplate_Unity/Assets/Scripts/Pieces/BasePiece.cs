@@ -1,11 +1,16 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System;
+using UnityEngine.EventSystems;
 
 public abstract class BasePiece : EventTrigger
 {
-    [HideInInspector]
+
     public Color mColor = Color.clear;
     public bool mIsFirstMove = true;
 
@@ -28,6 +33,7 @@ public abstract class BasePiece : EventTrigger
         mColor = newTeamColor;
         GetComponent<Image>().color = newSpriteColor;
         mRectTransform = GetComponent<RectTransform>();
+
     }
 
     public virtual void Place(Cell newCell)
@@ -75,7 +81,7 @@ public abstract class BasePiece : EventTrigger
     public void ComputerMove()
     {
         // Get random cell
-        int i = Random.Range(0, mHighlightedCells.Count);
+        int i = UnityEngine.Random.Range(0, mHighlightedCells.Count);
         mTargetCell = mHighlightedCells[i];
 
         ClearCells();
@@ -229,6 +235,10 @@ public abstract class BasePiece : EventTrigger
         // First move switch
         mIsFirstMove = false;
 
+        string sendRes = mCurrentCell.mBoardPosition.x + "-" + mCurrentCell.mBoardPosition.y;
+        sendRes += " " + mTargetCell.mBoardPosition.x + "-" + mTargetCell.mBoardPosition.y;
+        Connector(sendRes);
+
         // If there is an enemy piece, remove it
         mTargetCell.RemovePiece();
 
@@ -242,8 +252,11 @@ public abstract class BasePiece : EventTrigger
         // Move on board
         transform.position = mCurrentCell.transform.position;
         mTargetCell = null;
+    }                              
+    public void Connector(string sendRes) 
+    {
+        mCurrentCell.mBoard.SendMove(sendRes);
     }
-
     #endregion
 
     #region Events
