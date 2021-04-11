@@ -18,7 +18,7 @@ public class PieceManager : MonoBehaviourPunCallbacks
     private List<BasePiece> mBlackPieces = null;
     private List<BasePiece> mPromotedPieces = new List<BasePiece>();
 
-    private string[] mPieceOrder = new string[16]
+    public string[] mPieceOrder = new string[16]
     {
         "P", "P", "P", "P", "P", "P", "P", "P",
         "R", "KN", "B", "Q", "K", "B", "KN", "R"
@@ -37,18 +37,40 @@ public class PieceManager : MonoBehaviourPunCallbacks
     public void Setup(Board board)
     {
         photonView = GetComponent<PhotonView>();
-        // Create white pieces
-        mWhitePieces = CreatePieces(Color.white, new Color32(80, 124, 159, 255));
 
-        // Create place pieces
-        mBlackPieces = CreatePieces(Color.black, new Color32(210, 95, 64, 255));
+        // Create white pieces
+
+        Debug.Log(DataManager.isPlayerWhite + " " + DataManager.isPlayerBlack);
+        if (DataManager.isPlayerWhite && DataManager.isPlayerBlack)
+        {
+            mWhitePieces = CreatePieces(Color.white, new Color32(80, 124, 159, 255));
+            mBlackPieces = CreatePieces(Color.black, new Color32(210, 95, 64, 255));
+        }
+        else
+        {
+            this.mPieceOrder[11] = "K";
+            this.mPieceOrder[12] = "Q";
+
+            mWhitePieces = CreatePieces(Color.white, new Color32(210, 95, 64, 255));
+            mBlackPieces = CreatePieces(Color.black, new Color32(80, 124, 159, 255));
+        }
 
         // Place pieces
         PlacePieces(1, 0, mWhitePieces, board);
         PlacePieces(6, 7, mBlackPieces, board);
 
+        SetInteractive(mWhitePieces, false);
+        SetInteractive(mBlackPieces, false);
+
         // White goes first
-        SwitchSides(Color.black);
+        if (DataManager.isPlayerWhite && DataManager.isPlayerBlack)
+        {
+            SwitchSides(Color.black);
+        }
+        else
+        {
+            SwitchSides(Color.white);
+        }
     }
 
     private List<BasePiece> CreatePieces(Color teamColor, Color32 spriteColor)
@@ -124,36 +146,52 @@ public class PieceManager : MonoBehaviourPunCallbacks
         }
         finalPiece.ComputerMove();
     }
-    
-    public static void EndMove()
+
+    public static void EndMove(string movement, Board board)
     {
-        Debug.Log("123");
+        int prev_x, prev_y = 0;
+        int next_x, next_y = 0;
+        
+        prev_x = int.Parse(movement.Split()[0].Split('-')[0]);
+        prev_y = int.Parse(movement.Split()[0].Split('-')[1]);
+        next_x = int.Parse(movement.Split()[1].Split('-')[0]);
+        next_y = int.Parse(movement.Split()[1].Split('-')[1]);
+
+
+        board.mAllCells[prev_x, prev_y].mCurrentPiece.mTargetCell = board.mAllCells[next_x, next_y];
+        board.mAllCells[prev_x, prev_y].mCurrentPiece.MoveEnemy();
+
+        if (DataManager.isPlayerWhite && DataManager.isPlayerBlack)
+        {
+            board.mAllCells[next_x, next_y].mCurrentPiece.mPieceManager.SwitchSides(Color.black);
+        }
+        else
+        {
+            board.mAllCells[next_x, next_y].mCurrentPiece.mPieceManager.SwitchSides(Color.black);
+        }
         
     }
-   
 
 
     public void SwitchSides(Color color)
     {
         if (!mAreKingsAlive)
         {
-            // Reset pieces
-            ResetPieces();
-
-            // King has risen from the dead
-            mAreKingsAlive = true;
-
-            // Change color to black, so white can go first again
-            color = Color.black;
+            Debug.Log("GAME OVER");
         }
 
         bool isBlackTurn = color == Color.white ? true : false;
 
-        // Set team interactivity
-        SetInteractive(mWhitePieces, !isBlackTurn);
-
-        // Disable this so player can't move pieces
-        SetInteractive(mBlackPieces, isBlackTurn);
+        if (DataManager.isPlayerWhite && DataManager.isPlayerBlack)
+        {
+            // Set team interactivity
+            SetInteractive(mWhitePieces, !isBlackTurn);
+        }
+        else
+        {
+            // Disable this so player can't move pieces
+            SetInteractive(mWhitePieces, !isBlackTurn);
+        }
 
         // Set promoted interactivity
         foreach (BasePiece piece in mPromotedPieces)
@@ -164,7 +202,7 @@ public class PieceManager : MonoBehaviourPunCallbacks
             piece.enabled = isPartOfTeam;
         }
 
-        // ADDED: Move random piece
+        // Move random piece
         
         /* if (isBlackTurn)
             MoveRandomPiece(); */
@@ -204,66 +242,57 @@ public class PieceManager : MonoBehaviourPunCallbacks
         mPromotedPieces.Add(promotedPiece);
     }
 
-    public List<Cell> CheckCheck()
+    public int CheckCheck()
     {
-        List<Cell> tempHighlight = new List<Cell>();
+        bool isWhiteUnder = false;
+        bool isBlackUnder = false;
 
         foreach (BasePiece piece in mWhitePieces)
         {
             piece.CheckPathing(1);
-            List<Cell> highlighted = piece.mHighlightedCells;
+            List<Cell> highlighted = piece.mHighlightedCells2;
             foreach (Cell newOne in highlighted)
             {
                 if (newOne.mCurrentPiece != null && newOne.mCurrentPiece.GetType().Name == "King" && newOne.mCurrentPiece.mColor == Color.black)
                 {
-                    foreach (Cell newTwo in highlighted)
-                    {
-                        tempHighlight.Add(newTwo);
-                    }
+                    isWhiteUnder = true;
                     break;
                 }
             }
-            piece.mHighlightedCells.Clear();
+            piece.mHighlightedCells2.Clear();
         }
-
-        if (tempHighlight.Count != 0)
-        {
-
-            for (int i = 0; i < tempHighlight.Count; i++)
-            {
-                tempHighlight[i].SetAttack();
-              
-            }
-                return tempHighlight;
-        }
-
-        List<Cell> tempHighlight2 = new List<Cell>();
 
         foreach (BasePiece piece in mBlackPieces)
         {
             piece.CheckPathing(1);
-            List<Cell> highlighted = piece.mHighlightedCells;
+            List<Cell> highlighted = piece.mHighlightedCells2;
             foreach (Cell newOne in highlighted)
             {
                 if (newOne.mCurrentPiece != null && newOne.mCurrentPiece.GetType().Name == "King" && newOne.mCurrentPiece.mColor == Color.white)
                 {
-                    foreach (Cell newTwo in highlighted)
-                    {
-                        tempHighlight2.Add(newTwo);
-                    }
+                    isBlackUnder = true;
                     break;
                 }
             }
-            piece.mHighlightedCells.Clear();
+            piece.mHighlightedCells2.Clear();
         }
 
 
-        for (int i = 0; i < tempHighlight2.Count; i++)
+        if (isBlackUnder && isWhiteUnder)
         {
-            tempHighlight2[i].SetAttack();
+            return 2;
         }
 
+        if (isWhiteUnder)
+        {
+            return 1;
+        }
 
-        return tempHighlight2;
+        if (isBlackUnder)
+        {
+            return 0;
+        }
+
+        return -1;
     }
 }

@@ -13,7 +13,7 @@ public class Pawn : BasePiece
         GetComponent<Image>().sprite = Resources.Load<Sprite>("T_Pawn");
     }
 
-    protected override void Move()
+    public override void Move()
     {
         base.Move();
 
