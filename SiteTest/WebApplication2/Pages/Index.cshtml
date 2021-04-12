@@ -1,0 +1,214 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Form</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="css/site.css">
+    <style>
+        .form {
+            display: none;
+        }
+
+        .form1 {
+            display: none;
+        }
+
+        .none {
+            display: none;
+        }
+
+        .webgl-content {
+            margin-top: 150px;
+        }
+
+        .relax_btn, button {
+            color: #000;
+            text-rendering: auto;
+            letter-spacing: normal;
+            word-spacing: normal;
+            text-transform: none;
+            text-indent: 0px;
+            text-shadow: none;
+            display: inline-block;
+            text-align: center;
+            align-items: flex-start;
+            cursor: default;
+            box-sizing: border-box;
+            margin: 0em;
+            font: 400 13.3333px Arial;
+            padding: 1px 6px;
+            border-width: 2px;
+            border-style: outset;
+            border-image: initial;
+            background: transparent;
+            border-color: rgb(118,118,118);
+            text-decoration: none;
+        }
+    </style>
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+        var unityInstance = UnityLoader.instantiate("unityContainer", "Build/webGL_chess.json", { onProgress: UnityProgress });
+    </script>
+</head>
+<body>
+    <div class="choose">
+        <div class="input-form">
+            <button id="demo" onclick="F1()">Login</button>
+        </div>
+        <div class="input-form1">
+            <button id="demo1" onclick="F3()">Registration</button>
+        </div>
+        <div class="play-but">
+            <button id="play" onclick="F6()">Play</button>
+        </div>
+        <div class="play-but">
+            <a class="relax_btn" href="https://pnrtscr.com/kqrkc7" id="play" onclick="F7()">Logout</a>
+        </div>
+    </div>
+    <form class="form" name="form">
+        <h1>Login</h1>
+        <div class="input-form">
+            <input type="text" name="username" placeholder="username">
+        </div>
+        <div class="input-form">
+            <input type="password" name="password" placeholder="password">
+        </div>
+        <div class="input-form">
+            <input type="submit" value="Login">
+        </div>
+    </form>
+    <form class="form1" name="form1">
+        <h1 title="Форма регистрации на сайте">Registration</h1>
+        <div class="input-form1">
+            <input type="text" name="firstName" placeholder="firstName">
+        </div>
+        <div class="input-form1">
+            <input type="text" name="lastName" placeholder="lastName">
+        </div>
+        <div class="input-form1">
+            <input type="text" name="username" placeholder="username">
+        </div>
+        <div class="input-form1">
+            <input type="password" name="password" placeholder="password">
+        </div>
+        <div class="input-form1">
+            <input type="submit" value="Login">
+        </div>
+    </form>
+    <div>
+        <p class="username">1</p>
+        <p class="password">1</p>
+    </div>
+    <div class="webgl-content none ">
+        <div id="unityContainer" style="width: 960px; height: 600px"></div>
+        <div class="footer">
+            <div class="webgl-logo"></div>
+            <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+            <div class="title">Button Test</div>
+        </div>
+    </div>
+    <script>
+        function F1() {
+            document.getElementsByClassName("form")[0].style.display = "block";
+            document.getElementsByClassName("form1")[0].style.display = "none";
+            document.getElementsByClassName("none")[0].style.display = "none";
+        }
+    </script>
+    <script>
+        document.forms["form"].addEventListener("submit", e => {
+            e.preventDefault()
+            e.target.style.display = "none";
+            FindUser()
+        })
+    </script>
+    <script>
+        function F3() {
+            document.getElementsByClassName("form1")[0].style.display = "block";
+            document.getElementsByClassName("form")[0].style.display = "none";
+        }
+    </script>
+    <script>
+        document.forms["form1"].addEventListener("submit", e => {
+            e.preventDefault()
+            e.target.style.display = "none";
+            AddNewUser()
+        })
+    </script>
+    <script>
+        async function AddNewUser() {
+            let form = document.forms["form1"]
+            let newUser = {
+                username: form.elements["username"].value,
+                password: form.elements["password"].value,
+                firstName: form.elements["firstName"].value,
+                lastname: form.elements["lastName"].value,
+            }
+            await fetch(
+                'https://localhost:5001/api/register', {
+                method: 'POST',
+                body: JSON.stringify(newUser),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+        }
+    </script>
+    <script>
+        function FindUser() {
+            let form = document.forms["form"]
+            let userInfo = {
+                username: form.elements["username"].value,
+                password: form.elements["password"].value,
+            }
+            fetch(
+                'https://localhost:5001/api/authenticate', {
+                method: 'POST',
+                body: JSON.stringify(userInfo),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.username == userInfo.username && data.password == userInfo.password) {
+                        let usernameField = document.querySelector("p.username");
+                        usernameField.textContent = data.username
+                    }
+                    else if (data.status == 400) {
+                        console.log("2")
+                    }
+                })
+                .catch(error => {
+                    console.log("error")
+                })
+        }
+        document.forms["form"].addEventListener("submit", event => {
+            event.preventDefault();
+            let username = event.target.elements["username"].value;
+            let password = event.target.elements["password"].value;
+            let userInfo = {
+                username: username,
+                password: password
+            }
+            console.log(userInfo)
+        })
+        function F6() {
+            document.getElementsByClassName("form1")[0].style.display = "none";
+            document.getElementsByClassName("form")[0].style.display = "none";
+            document.querySelector(".webgl-content").classList.toggle("none");
+        }
+    </script>
+</body>
+</html>

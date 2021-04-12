@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "8UzhrLhL5ZFnIkwIUHhzgJHG8kE5/SAaA8L9ZdmHds8fBoruEefjb1FKMeM2zca0Rh5G0TOQBzANeHlejifssg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\demob\\source\\repos\\WebApplication2\\WebApplication2\\WebApplication2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\demob\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.14\\microsoft.netcore.app.host.win-x64.3.1.14.nupkg.sha512"
+  ],
+  "logs": []
+}

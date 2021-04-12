@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Build\22.data.unityweb" />
+    <None Include="wwwroot\Build\22.wasm.code.unityweb" />
+    <None Include="wwwroot\Build\22.wasm.framework.unityweb" />
+    <None Include="wwwroot\Build\UnityLoader.js" />
+    <None Include="wwwroot\TemplateData\UnityProgress.js" />
+  </ItemGroup>
+
+</Project>
