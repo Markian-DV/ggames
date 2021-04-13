@@ -13,6 +13,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public Text logText;
     public GameObject roomCodeInputField;
     public static string roomCode;
+    public Text Score;
 
     private void Start()
     {
@@ -25,6 +26,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
 
         photonView = GetComponent<PhotonView>();
+
+        Score.text = "Your score: " + DataManager.Score;
     }
 
     public override void OnConnectedToMaster()
