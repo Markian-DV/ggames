@@ -74,7 +74,10 @@ namespace ggames.Services
                 UserName = username
 
             };
+            
             var createdUser = await _userManager.CreateAsync(newUser, password);
+
+           
 
             if (!createdUser.Succeeded)
             {
@@ -84,7 +87,9 @@ namespace ggames.Services
                     Success = false
                 };
             }
-            
+
+            await _userManager.AddToRoleAsync(newUser, "User");
+
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 
