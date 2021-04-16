@@ -101,7 +101,7 @@ namespace ggames.Services
                     new Claim(JwtRegisteredClaimNames.Sub,User.Email),
                     new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Email,User.Email),
-                    
+                    new Claim("UserName",User.UserName),
                     new Claim("id", User.Id)
                 };
 
