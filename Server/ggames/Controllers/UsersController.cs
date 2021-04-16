@@ -65,7 +65,7 @@ namespace ggames.Controllers
             var user = await _userManager.FindByEmailAsync(updateToAdmimModel.Email);
 
             if (user == null) return NotFound();
-
+            await _userManager.RemoveFromRoleAsync(user, "User");
             await _userManager.AddToRoleAsync(user, "Admin");
 
             return Ok(user);
