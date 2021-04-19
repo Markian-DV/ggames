@@ -26,7 +26,7 @@ public abstract class BasePiece : EventTrigger
     protected Vector3Int mMovement = Vector3Int.one;
     public List<Cell> mHighlightedCells = new List<Cell>();
     public List<Cell> mHighlightedCells2 = new List<Cell>();
-    List<Cell> attackList = new List<Cell>();
+    public bool isActiveNow = true;
 
     public virtual void Setup(Color newTeamColor, Color32 newSpriteColor, PieceManager newPieceManager)
     {
@@ -44,7 +44,7 @@ public abstract class BasePiece : EventTrigger
         mCurrentCell = newCell;
         mOriginalCell = newCell;
         mCurrentCell.mCurrentPiece = this;
-
+        isActiveNow = true;
         // Object stuff
         transform.position = newCell.transform.position;
         gameObject.SetActive(true);
@@ -61,11 +61,31 @@ public abstract class BasePiece : EventTrigger
 
     public virtual void Kill()
     {
+        mCurrentCell.mBoard.mAllCells[mCurrentCell.mBoardPosition.x, mCurrentCell.mBoardPosition.y].mCurrentPiece = null;
+
+        mCurrentCell.mPreviousPiece = this;
+
         // Clear current cell
         mCurrentCell.mCurrentPiece = null;
 
+        isActiveNow = false;
+
         // Remove piece
         gameObject.SetActive(false);
+    }
+
+    public virtual void Delete()
+    {
+        mCurrentCell.mBoard.mAllCells[mCurrentCell.mBoardPosition.x, mCurrentCell.mBoardPosition.y].mCurrentPiece = null;
+
+        mCurrentCell.mPreviousPiece = this;
+
+        // Clear current cell
+        mCurrentCell.mCurrentPiece = null;
+
+        isActiveNow = false;
+
+        Destroy(gameObject);
     }
 
     public bool HasMove()
@@ -74,25 +94,15 @@ public abstract class BasePiece : EventTrigger
 
         // If no moves
         if (mHighlightedCells.Count == 0)
+        {
+            ClearCells();
             return false;
-
-        // If moves available
-        return true;
-    }
-
-    public void ComputerMove()
-    {
-        // Get random cell
-        int i = UnityEngine.Random.Range(0, mHighlightedCells.Count);
-        mTargetCell = mHighlightedCells[i];
+        }
 
         ClearCells();
 
-        // Move to new cell
-        Move();
-
-        // End turn
-        mPieceManager.SwitchSides(mColor);
+        // If moves available
+        return true;
     }
 
     #region Movement
@@ -149,50 +159,24 @@ public abstract class BasePiece : EventTrigger
 
             // Check
 
-            if (cellState != CellState.OutOfBounds)
+            if (cellState != CellState.OutOfBounds && cellState != CellState.Friendly)
             {
 
-                mCurrentCell.mBoard.mAllCells[currentX, currentY].mPreviousPiece = mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece;
-
-                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece != null)
-                {
-                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.x = -20;
-                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.y = -20;
-                }
-                mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece = this;
-
-                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece.mCurrentCell.mBoardPosition.x = -20;
-                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece.mCurrentCell.mBoardPosition.y = -20;
-                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece = null;
-
-                mCurrentCell.mBoardPosition.x = currentX;
-                mCurrentCell.mBoardPosition.y = currentY;
-                mCurrentCell.mCurrentPiece = this;
-
+                FakeMove(currentX, currentY);
                 int checkRes = mPieceManager.CheckCheck();
+                FakeMove(originalX, originalY);
 
-                mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece = mCurrentCell.mBoard.mAllCells[currentX, currentY].mPreviousPiece;
-
-                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece != null)
+                if (mCurrentCell.mBoard.mAllCells[currentX, currentY].mPreviousPiece != null)
                 {
-                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.x = currentX;
-                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mCurrentPiece.mCurrentCell.mBoardPosition.y = currentY;
+                    mCurrentCell.mBoard.mAllCells[currentX, currentY].mPreviousPiece.Place(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
                 }
-
-                mCurrentCell.mBoard.mAllCells[originalX, originalY].mCurrentPiece = this;
-                mCurrentCell.mBoardPosition.x = originalX;
-                mCurrentCell.mBoardPosition.y = originalY;
-                mCurrentCell.mCurrentPiece = this;
-
 
                 if ((checkRes == 1 && mColor == Color.black) || checkRes == 2)
                 {
-                    Debug.Log("Hello" + currentX + " " + currentY);
                     continue;
                 }
                 else if ((checkRes == 0 && mColor == Color.white) || checkRes == 2)
                 {
-                    Debug.Log("Wrong" + currentX + " " + currentY);
                     continue;
                 }
 
@@ -206,11 +190,9 @@ public abstract class BasePiece : EventTrigger
                 break;
             }
 
-            Debug.Log("--Here " + currentX + " " + currentY + " " + cellState);
             // If the cell is not free, break
             if (cellState != CellState.Free)
                 break;
-            Debug.Log("--Break " + currentX + " " + currentY);
             // Add to list
             mHighlightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
         }
@@ -287,6 +269,26 @@ public abstract class BasePiece : EventTrigger
         mTargetCell = null;
     }
 
+    public virtual void FakeMove(int targetX, int targetY)
+    {
+        mTargetCell = mCurrentCell.mBoard.mAllCells[targetX, targetY];
+
+        // If there is an enemy piece, remove it
+        mTargetCell.RemovePiece();
+
+        // Clear current
+        mCurrentCell.mCurrentPiece = null;
+
+        // Switch cells
+        mCurrentCell = mTargetCell;
+        mCurrentCell.mCurrentPiece = this;
+
+        // Move on board
+        // transform.position = mCurrentCell.transform.position;
+        mTargetCell = null;
+
+    }
+
     public virtual void Move()
     {
         // First move switch
@@ -296,7 +298,7 @@ public abstract class BasePiece : EventTrigger
         sendRes += " " + (7 - mTargetCell.mBoardPosition.x) + "-" + (7 - mTargetCell.mBoardPosition.y);
 
         // If there is an enemy piece, remove it
-        mTargetCell.RemovePiece();
+        mTargetCell.RemovePiece(1);
 
         // Clear current
         mCurrentCell.mCurrentPiece = null;
@@ -324,7 +326,7 @@ public abstract class BasePiece : EventTrigger
         base.OnBeginDrag(eventData);
 
         // Test for cells
-        CheckPathing(0);
+        CheckPathing();
 
         // Show valid cells
         ShowCells();
