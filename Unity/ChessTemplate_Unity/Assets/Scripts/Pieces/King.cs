@@ -19,8 +19,6 @@ public class King : BasePiece
     public override void Kill()
     {
         base.Kill();
-
-        mPieceManager.mAreKingsAlive = false;
     }
 
     public override void CheckPathing(int t=0)
@@ -94,7 +92,7 @@ public class King : BasePiece
         if (rookCell.mCurrentPiece is Rook)
             rook = (Rook)rookCell.mCurrentPiece;
 
-        if (rook.mColor != mColor || !rook.mIsFirstMove)
+        if (rook == null || rook.mColor != mColor || !rook.mIsFirstMove)
             return null;
 
         // Add target cell to highlighed cells

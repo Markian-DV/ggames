@@ -39,8 +39,6 @@ public class PieceManager : MonoBehaviourPunCallbacks
         photonView = GetComponent<PhotonView>();
 
         // Create white pieces
-
-        Debug.Log(DataManager.isPlayerWhite + " " + DataManager.isPlayerBlack);
         if (DataManager.isPlayerWhite && DataManager.isPlayerBlack)
         {
             mWhitePieces = CreatePieces(Color.white, new Color32(80, 124, 159, 255));
@@ -125,26 +123,71 @@ public class PieceManager : MonoBehaviourPunCallbacks
     private void SetInteractive(List<BasePiece> allPieces, bool value)
     {
         foreach (BasePiece piece in allPieces)
-            piece.enabled = value;
+        {
+            if (piece.isActiveNow)
+            {
+                piece.enabled = value;
+            }
+            else
+            {
+                piece.enabled = false;
+            }
+        }
     }
-    
 
     private void MoveRandomPiece()
     {
-        BasePiece finalPiece = null;
-        while (!finalPiece)
+        bool isAvailableWhite = false;
+        bool isAvailableBlack = false;
+
+        for (int i = 0; i < mWhitePieces.Count; i++)
         {
-            // Get piece
-            int i = UnityEngine.Random.Range(0, mBlackPieces.Count);
-            BasePiece newPiece = mBlackPieces[i];
-            // Does this piece have any moves?
-            if (!newPiece.HasMove())
+            if (mWhitePieces[i].isActiveNow == false || mWhitePieces[i].HasMove() == false)
+            {
                 continue;
-            // Is piece active?
-            if (newPiece.gameObject.activeInHierarchy)
-                finalPiece = newPiece;
+            }
+            else
+            {
+                isAvailableWhite = true;
+            }
         }
-        finalPiece.ComputerMove();
+
+        for (int i = 0; i < mBlackPieces.Count; i++)
+        {
+            if (mBlackPieces[i].isActiveNow == false || mBlackPieces[i].HasMove() == false)
+            {
+                continue;
+            }
+            else
+            {
+                isAvailableBlack = true;
+            }
+        }
+
+        if (!isAvailableWhite || !isAvailableBlack)
+        {
+            Debug.Log("Wow");
+
+            // WINNER-LOSE-PAT SCREEN
+            int result = CheckCheck();
+
+            if (result == 2)
+            {
+                Debug.Log("Both are winners");
+            }
+            else if (result == 1)
+            {
+                Debug.Log("You are winner");
+            }
+            else if (result == 0)
+            {
+                Debug.Log("You lose");
+            }
+            else
+            {
+                Debug.Log("It is draw");
+            }
+        }
     }
 
     public static void EndMove(string movement, Board board)
@@ -175,10 +218,6 @@ public class PieceManager : MonoBehaviourPunCallbacks
 
     public void SwitchSides(Color color)
     {
-        if (!mAreKingsAlive)
-        {
-            Debug.Log("GAME OVER");
-        }
 
         bool isBlackTurn = color == Color.white ? true : false;
 
@@ -202,11 +241,8 @@ public class PieceManager : MonoBehaviourPunCallbacks
             piece.enabled = isPartOfTeam;
         }
 
-        // Move random piece
-        
-        /* if (isBlackTurn)
-            MoveRandomPiece(); */
-        
+        // Check Moves
+        //MoveRandomPiece();
     }
 
     public void ResetPieces()
@@ -247,15 +283,23 @@ public class PieceManager : MonoBehaviourPunCallbacks
         bool isWhiteUnder = false;
         bool isBlackUnder = false;
 
+        string name_w = "";
+        string name_b = "";
+
         foreach (BasePiece piece in mWhitePieces)
         {
-            piece.CheckPathing(1);
+            if (piece.isActiveNow == true)
+            {
+                piece.CheckPathing(1);
+            }
+ 
             List<Cell> highlighted = piece.mHighlightedCells2;
             foreach (Cell newOne in highlighted)
             {
-                if (newOne.mCurrentPiece != null && newOne.mCurrentPiece.GetType().Name == "King" && newOne.mCurrentPiece.mColor == Color.black)
+                if (newOne.mCurrentPiece != null && newOne.mCurrentPiece.GetType().Name == "King" && newOne.mCurrentPiece.mColor != piece.mColor)
                 {
                     isWhiteUnder = true;
+                    name_w = piece.GetType().Name;
                     break;
                 }
             }
@@ -264,13 +308,17 @@ public class PieceManager : MonoBehaviourPunCallbacks
 
         foreach (BasePiece piece in mBlackPieces)
         {
-            piece.CheckPathing(1);
+            if (piece.isActiveNow == true)
+            {
+                piece.CheckPathing(1);
+            }
             List<Cell> highlighted = piece.mHighlightedCells2;
             foreach (Cell newOne in highlighted)
             {
-                if (newOne.mCurrentPiece != null && newOne.mCurrentPiece.GetType().Name == "King" && newOne.mCurrentPiece.mColor == Color.white)
+                if (newOne.mCurrentPiece != null && newOne.mCurrentPiece.GetType().Name == "King" && newOne.mCurrentPiece.mColor != piece.mColor)
                 {
                     isBlackUnder = true;
+                    name_b = piece.GetType().Name;
                     break;
                 }
             }
