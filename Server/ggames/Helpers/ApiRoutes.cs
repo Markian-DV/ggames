@@ -16,7 +16,7 @@ namespace ggames.Helpers
         {
             public const string GetAll = Root + "/users";
             public const string GetById = Root + "/users/{Id}";
-            public const string AddAdmin = Root + "/users/";
+            public const string AddAdmin = Root + "/users";
             public const string Delete = Root + "/users/{Id}";
         }
 
@@ -26,5 +26,13 @@ namespace ggames.Helpers
 
             public const string Register = Root + "/auth/register";
         }
+
+        public static class Chess
+        {
+            public const string GetAll = Root + "/rating";
+            public const string GetById = Root + "/rating/{Id}";
+            public const string UpdateRating = Root + "/rating";
+        }
+
     }
 }

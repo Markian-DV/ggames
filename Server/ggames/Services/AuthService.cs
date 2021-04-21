@@ -1,4 +1,5 @@
-﻿using ggames.Models;
+﻿using ggames.Data;
+using ggames.Models;
 using ggames.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -17,11 +18,12 @@ namespace ggames.Services
 
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JwtSettings _jwtSettings;
-
-        public AuthService(UserManager<IdentityUser> userManager, JwtSettings jwtSettings)
+        private readonly AppDataContext _appDataContext;
+        public AuthService(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, AppDataContext appDataContext)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
+            _appDataContext = appDataContext;
         }
 
 
@@ -76,17 +78,30 @@ namespace ggames.Services
             };
             
             var createdUser = await _userManager.CreateAsync(newUser, password);
+            
 
+            
            
 
             if (!createdUser.Succeeded)
             {
+
+                
+
                 return new AuthResult
                 {
                     Errors = createdUser.Errors.Select(x => x.Description),
                     Success = false
                 };
             }
+
+            // add info in ChessRating table 
+            await _appDataContext.ChessRatings.AddAsync(new ChessRating
+            {
+                Rating = 0,
+                UserId = (await _userManager.GetUserIdAsync(newUser)).ToString()
+            });
+            await _appDataContext.SaveChangesAsync();
 
             await _userManager.AddToRoleAsync(newUser, "User");
 

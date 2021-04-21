@@ -72,6 +72,7 @@ namespace ggames
             });
             //jwt_end
 
+            services.AddScoped<IChessService, ChessService>();
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddCors(opt =>

@@ -1,4 +1,5 @@
-﻿using ggames.Helpers;
+﻿using ggames.Data;
+using ggames.Helpers;
 using ggames.Models;
 using ggames.Services;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,7 @@ namespace ggames.Controllers
         public AuthController(IAuthService authService)
         {
             _authService = authService;
+
         }
 
 
@@ -43,6 +45,7 @@ namespace ggames.Controllers
                     Errors = authResponse.Errors
                 });
             }
+            
             return Ok(new 
             {
                 Token = authResponse.Token
