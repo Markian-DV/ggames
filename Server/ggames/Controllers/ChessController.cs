@@ -4,6 +4,7 @@ using ggames.Models;
 using ggames.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,34 @@ namespace ggames.Controllers
 
     [ApiController]
     [Authorize]
-    public class ChessControllere : ControllerBase
+    public class ChessController : ControllerBase
     {
         private readonly IChessService _chessService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ChessControllere(IChessService chessService)
+        public ChessController(IChessService chessService, UserManager<IdentityUser> userManager)
         {
             _chessService = chessService;
+            _userManager = userManager;
         }
 
         [Route(ApiRoutes.Chess.GetAll)]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok((await _chessService.GetRatingAsync()).Select(x => new {Rating = x.Rating, UserId = x.UserId }));
+
+            var TempList = await _chessService.GetRatingAsync();
+
+            var ResultList = TempList.Select(x => new { 
+                Rating = x.Rating, 
+                UserId = x.UserId,
+                Username = (_userManager.FindByIdAsync(x.UserId).Result.UserName)
+            });
+
+            return Ok(ResultList);
+                //.Select(async x => new {Rating = x.Rating, UserId = x.UserId
+            //, Username = (await  _userManager.FindByIdAsync(x.UserId)).UserName
+            //}));
         }
         [Route(ApiRoutes.Chess.GetById)]
         [HttpGet]
@@ -38,7 +53,8 @@ namespace ggames.Controllers
             if (rating == null) return NotFound();
             else
             {
-                return Ok(new { Rating = rating.Rating, UserId = rating.UserId });
+                string username = (await _userManager.FindByIdAsync(rating.UserId)).UserName;
+                return Ok(new { Rating = rating.Rating, UserId = rating.UserId, Username = username });
             }
         }
 
