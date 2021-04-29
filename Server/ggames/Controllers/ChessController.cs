@@ -37,7 +37,7 @@ namespace ggames.Controllers
             var ResultList = TempList.Select(x => new { 
                 Rating = x.Rating, 
                 UserId = x.UserId,
-                Username = (_userManager.FindByIdAsync(x.UserId).Result.UserName)
+                Username = (_userManager.FindByIdAsync(x.UserId).Result.UserName)  //?
             });
 
             return Ok(ResultList);
