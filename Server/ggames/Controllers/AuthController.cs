@@ -80,5 +80,24 @@ namespace ggames.Controllers
             });
         }
 
+
+        [Route(ApiRoutes.Auth.FBAuth)]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] UserFBAuthRequest request)
+        {
+            var authResponse = await _authService.LoginWithFacebookAsync(request.accessToken);
+            if (!authResponse.Success)
+            {
+                return BadRequest(new 
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+            return Ok(new 
+            {
+                Token = authResponse.Token
+            });
+
+        }
     }
 }

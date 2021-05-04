@@ -25,6 +25,8 @@ namespace ggames.Helpers
             public const string Login = Root + "/auth/login";
 
             public const string Register = Root + "/auth/register";
+
+            public const string FBAuth = Root + "/auth/fb";
         }
 
         public static class Chess

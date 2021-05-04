@@ -19,11 +19,13 @@ namespace ggames.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JwtSettings _jwtSettings;
         private readonly AppDataContext _appDataContext;
-        public AuthService(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, AppDataContext appDataContext)
+        private readonly IFBAuthService _facebookAuthService;
+        public AuthService(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, AppDataContext appDataContext, IFBAuthService facebookAuthService = null)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _appDataContext = appDataContext;
+            _facebookAuthService = facebookAuthService;
         }
 
 
@@ -76,17 +78,17 @@ namespace ggames.Services
                 UserName = username
 
             };
-            
-            var createdUser = await _userManager.CreateAsync(newUser, password);
-            
 
-            
-           
+            var createdUser = await _userManager.CreateAsync(newUser, password);
+
+
+
+
 
             if (!createdUser.Succeeded)
             {
 
-                
+
 
                 return new AuthResult
                 {
@@ -126,15 +128,15 @@ namespace ggames.Services
                 };
 
             var userRoles = await _userManager.GetRolesAsync(User);
-            if(userRoles.Count>0)
+            if (userRoles.Count > 0)
             {
-                foreach(var role in userRoles)
+                foreach (var role in userRoles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
             }
 
-            
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -152,6 +154,60 @@ namespace ggames.Services
                 Success = true,
                 Token = tokenHandler.WriteToken(token)
             };
+        }
+
+        public async Task<AuthResult> LoginWithFacebookAsync(string accessToken)
+        {
+            var validateTokenResult = await _facebookAuthService.ValidateAccessTokenAsync(accessToken);
+
+            if (!validateTokenResult.Data.IsValid)
+            {
+                return new AuthResult
+                {
+                    Errors = new[] { "invalid facebook token" }
+                };
+
+            }
+
+            var userInfo = await _facebookAuthService.GetUserInfoAsync(accessToken);
+
+            var user = await _userManager.FindByEmailAsync(userInfo.Email);
+            if (user == null)
+            {
+                IdentityUser identityUser = new IdentityUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Email = userInfo.Email,
+                    UserName = userInfo.Email.Split("@")[0]
+                };
+                var created = await _userManager.CreateAsync(identityUser);
+                if (!created.Succeeded)
+                {
+                    return new AuthResult
+                    {
+                        Errors = new[] { "smth went wrong " }
+                    };
+                }
+
+                // add info in ChessRating table
+                await _appDataContext.ChessRatings.AddAsync(new ChessRating
+                {
+                    Rating = 0,
+                    UserId = (await _userManager.GetUserIdAsync(identityUser)).ToString()
+                });
+                await _appDataContext.SaveChangesAsync();
+
+                await _userManager.AddToRoleAsync(identityUser, "User");
+
+                return await GenerateAuthenticationResultForUserAsync(identityUser);
+
+            }
+            else
+            {
+                return await GenerateAuthenticationResultForUserAsync(user);
+            }
+
+
         }
     }
 }

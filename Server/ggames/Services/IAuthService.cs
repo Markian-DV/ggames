@@ -11,5 +11,7 @@ namespace ggames.Services
         Task<AuthResult> RegisterAsync(string email, string password, string username);
 
         Task<AuthResult> LoginAsync(string email, string password);
+
+        Task<AuthResult> LoginWithFacebookAsync(string accessToken);
     }
 }
