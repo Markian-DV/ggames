@@ -75,6 +75,14 @@ namespace ggames
             services.AddScoped<IChessService, ChessService>();
             services.AddScoped<IAuthService, AuthService>();
 
+            //facebook auth install
+            var facebookAuthSettings = new FBAuthSettings();
+            Configuration.Bind(nameof(FBAuthSettings), facebookAuthSettings);
+            services.AddSingleton(facebookAuthSettings);
+            services.AddHttpClient();
+            services.AddSingleton<IFBAuthService, FBAuthService>();
+
+
             services.AddCors(opt =>
             {
                 opt.AddDefaultPolicy(builder =>
