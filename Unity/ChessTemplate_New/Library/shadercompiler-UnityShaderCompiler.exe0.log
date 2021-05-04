@@ -1,0 +1,10 @@
+Base path: 'D:/Unity/2017.3.0f3/Editor/Data', plugins path 'D:/Unity/2017.3.0f3/Editor/Data/PlaybackEngines'
+Cmd: initializeCompiler
+Cmd: preprocessCompute
+  insize=3267 outsize=3273 ok=1
+Cmd: preprocessCompute
+  insize=2341 outsize=2343 ok=1
+Cmd: preprocessCompute
+  insize=1431 outsize=1435 ok=1
+Cmd: preprocessCompute
+  insize=1522 outsize=1526 ok=1
