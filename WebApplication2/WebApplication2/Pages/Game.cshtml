@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="TemplateData/style.css">
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script>
-        var unityInstance = UnityLoader.instantiate("unityContainer", "Build/123.json", { onProgress: UnityProgress });
+        var unityInstance = UnityLoader.instantiate("unityContainer", "Build/webGL_chess.json", { onProgress: UnityProgress });
     </script>
     <style>
         * {
@@ -19,6 +20,10 @@
             padding: 0;
             box-sizing: border-box;
             font-family: sans-serif;
+        }
+
+        a {
+            text-decoration: none;
         }
 
         main {
@@ -30,6 +35,14 @@
             font-family: inherit;
             font-size: inherit;
             vertical-align: middle;
+        }
+
+        ul {
+            margin-bottom: 0;
+        }
+
+        p {
+            margin: 0;
         }
 
         .pageHeader {
@@ -62,15 +75,12 @@
             background: 0 0;
             position: relative;
             max-width: 1212px;
-            min-height: 100%;
+            height: 100%;
             margin: 0 auto;
         }
 
         .logo {
-            padding: 11px 0 0;
             margin-right: 40px;
-            border-radius: 3px;
-            overflow: hidden;
         }
 
         #logo {
@@ -78,8 +88,8 @@
             width: 132px;
             height: 35px;
             background-repeat: no-repeat;
-            background-image: url(./TemplateData/ava.jpg);
-            background-size: 100% 100%;
+            background-image: url(./TemplateData/ava.png);
+            background-size: 70% 100%;
         }
 
         .navContainer {
@@ -118,7 +128,7 @@
                     transform: scaleY(1);
                 }
 
-        .buttonPlay {
+        .header-nav_element {
             font-size: 16px;
             display: inline-block;
             list-style: none;
@@ -149,120 +159,241 @@
         .expandingMenuTrigger {
             display: none;
         }
-    </style>
+
+        .choose {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .choose > .input-form {
+                margin: 15px 10px;
+            }
+
+        .disabled {
+            pointer-events: none;
+            opacity: .5;
+        }
+
+        .disabled > a {
+            color: lightgrey;
+        }
+
+        .userInfo_userName {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .userInfo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .userInfo > p:first-child {
+                margin-right: 5px;
+            }
+
+     </style>
 </head>
-  <body>
-      <header class="pageHeader">
-          <div class="overLayer"></div>
+<body>
+    <header class="pageHeader">
+        <div class="overLayer"></div>
 
-          <div class="pageWrap">
-              <div class="logo">
-                  <a onclick="EbaloGeki()" id="logo"></a>
-              </div>
+        <div class="pageWrap">
+            <div class="logo">
+                <a onclick="EbaloGeki()" id="logo"></a>
+            </div>
 
-              <div class="navContainer">
-                  <nav class="mainMenu ">
-                      <ul class="expandingMenuList">
-                          <li class="buttonPlay" onclick="StartPlay()">
-                              <a class="textLogo">
-                                  <span>Play</span>
-                              </a>
-                          </li>
-                          <li class="buttonPlay">
-                              <a class="textLogo">
-                                  <span>Rules</span>
-                              </a>
-                          </li>
-                          <li class="buttonPlay" onclick="StartAbout()">
-                              <a class="textLogo">
-                                  <span>Info</span>
-                              </a>
-                          </li>
-                          <li class="buttonPlay">
-                              <a class="textLogo">
-                                  <span>Pososi</span>
-                              </a>
-                          </li>
-                      </ul>
-                  </nav>
-              </div>
-          </div>
-      </header>
-      <div class="webgl-content">
-          <div id="unityContainer" style="width: 960px; height: 600px"></div>
-          <div class="footer">
-              <div class="webgl-logo"></div>
-              <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
-              <div class="title">OuterCall</div>
-          </div>
-      </div>
-      <script>
-          let token = JSON.parse(localStorage.getItem('token'));
-          let userInfo = parseJwt(token);
-          let userRating;
+            <div class="navContainer">
+                <nav class="mainMenu ">
+                    <ul class="expandingMenuList">
+                        <li class="header-nav_element playBtn disabled" onclick="StartPlay()">
+                            <a class="textLogo">
+                                <span>Play</span>
+                            </a>
+                        </li>
+                        <li class="header-nav_element">
+                            <a class="textLogo">
+                                <span>Rules</span>
+                            </a>
+                        </li>
+                        <li class="header-nav_element" onclick="StartAbout()">
+                            <a class="textLogo">
+                                <span>Info</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <button type="button" class="btn btn-primary userAuthorization" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Sign-In
+            </button>
+
+            <div class="userInfo" style="display: none">
+                <p class="userInfo_userName"></p>
+
+                <button type="button" class="btn btn-warning" onclick="SignOut()">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <div class="choose">
+                        <div class="input-form">
+                            <button type="button" class="btn btn-primary choose_sign-in disabled" onclick="F1()">Sign-In</button>
+                        </div>
+                        <div class="input-form">
+                            <button type="button" class="btn btn-primary choose_sign-up" onclick="F3()">Sign-Up</button>
+                        </div>
+                    </div>
+
+                    <form class="signInModal" name="form">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" name="email" id="floatingSignInUserNameInput" placeholder="name@example.com">
+                            <label for="floatingSignInUserNameInput">Email</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" name="password" id="floatingSignInPasswordInput" placeholder="name@example.com">
+                            <label for="floatingSignInPasswordInput">Password</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" style="width: 100%">Sign In</button>
+                    </form>
+
+                    <form class="signUpModal" name="form1" style="display: none">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="username" id="floatingSignUpUserNameInput" placeholder="name@example.com">
+                            <label for="floatingSignUpUserNameInput">User Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" name="email" id="floatingSignUpEmailInput" placeholder="name@example.com">
+                            <label for="floatingSignUpEmailInput">Email</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" name="password" id="floatingSigUpnPasswordInput" placeholder="name@example.com">
+                            <label for="floatingSignUpPasswordInput">Password</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" style="width: 100%">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="webgl-content">
+        <div id="unityContainer" style="width: 960px; height: 600px"></div>
+        <div class="footer">
+            <div class="webgl-logo"></div>
+            <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+            <div class="title">OuterCall</div>
+        </div>
+    </div>
+    <script>
+        function UserLoggedCheck() {
+            const USER_INFO = document.querySelector('.userInfo');
+            const USER_INFO_USERNAME = document.querySelector('.userInfo_userName');
+            const PLAY_BTN = document.querySelector('.playBtn');
+            const USER_AUTHORIZATION = document.querySelector('.userAuthorization');
+
+            if (localStorage.getItem('token')) {
+                let info = parseJwt(localStorage.getItem('token'));
+
+                USER_INFO.style.display = '';
+                USER_INFO_USERNAME.innerHTML = `<p>${info.userName}</p>`;
+                PLAY_BTN.classList.remove('disabled');
+                USER_AUTHORIZATION.style.display = 'none';
+            }
+            else {
+                PLAY_BTN.classList.add('disabled');
+                USER_INFO.style.display = 'none';
+                USER_AUTHORIZATION.style.display = '';
+            }
+        }
+
+        UserLoggedCheck();
+
+        let token = JSON.parse(localStorage.getItem('token'));
+        let userInfo = parseJwt(token);
+        let userRating;
 
 
-          function getRating() {
-              return fetch(`https://markianpack.azurewebsites.net/api/rating/${userInfo.id}`, {
-                  method: 'GET',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'Authorization': 'Bearer ' + token.toString(),
-                      "Access-Control-Allow-Origin": "*"
-                  }
-              })
-                  .then(response => response.json());
-          }
+        function getRating() {
+            return fetch(`https://markianpack.azurewebsites.net/api/rating/${userInfo.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.toString(),
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json());
+        }
 
-          function StartPlay() {
-              window.location.replace('./game');
-          }
+        function StartPlay() {
+            window.location.replace('./game');
+        }
 
+        function StartAbout() {
+            window.location.replace('./about');
+        }
 
-          function EbaloGeki() {
-              window.location.replace('./index');
-          }
+        function EbaloGeki() {
+            window.location.replace('./index');
+        }
 
-          function parseJwt(token) {
-              var base64Url = token.split('.')[1];
-              var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-              var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                  return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-              }).join(''));
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
 
-              return JSON.parse(jsonPayload);
-          };
+            return JSON.parse(jsonPayload);
+        };
 
-          getRating()
-              .then(data => {
-                  userRating = data.rating.toString();
-                  Loaded()
-              })
+        getRating()
+            .then(data => {
+                userRating = data.rating.toString();
+                Loaded()
+            })
 
-          function Loaded() {
-              unityInstance.SendMessage('JSManager', 'GetNickname', userInfo.userName);
-              unityInstance.SendMessage('JSManager', 'GetScore', userRating);
-          }
-          
-          function GameResult(arg) {
-              let userID = parseJwt(JSON.parse(localStorage.getItem('token')));
-              let ratingInfo = {
-                  userId: userID.id,
-                  rating: arg,
-              }
-              fetch('https://markianpack.azurewebsites.net/api/rating/', {
-                  method: 'POST',
-                  body: JSON.stringify(ratingInfo),
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + token.toString(),
-                      'Accept': 'application/json',
-                      "Access-Control-Allow-Origin": "*"
-                  }
-              })
-          }
+        function Loaded() {
+            unityInstance.SendMessage('JSManager', 'GetNickname', userInfo.userName);
+            unityInstance.SendMessage('JSManager', 'GetScore', userRating);
+        }
 
-      </script>
-  </body>
+        function GameResult(arg) {
+            alert(arg);
+            let userID = parseJwt(JSON.parse(localStorage.getItem('token')));
+            let ratingInfo = {
+                userId: userID.id,
+                rating: arg,
+            }
+            fetch('https://markianpack.azurewebsites.net/api/rating/', {
+                method: 'POST',
+                body: JSON.stringify(ratingInfo),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token.toString(),
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</body>
 </html>

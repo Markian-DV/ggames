@@ -86,8 +86,8 @@
             width: 132px;
             height: 35px;
             background-repeat: no-repeat;
-            background-image: url(./TemplateData/ava.jpg);
-            background-size: 100% 100%;
+            background-image: url(./TemplateData/ava.png);
+            background-size: 70% 100%;
         }
 
         .navContainer {
@@ -157,47 +157,7 @@
         .expandingMenuTrigger {
             display: none;
         }
-
-        .form {
-            display: none;
-        }
-
-        .form1 {
-            display: none;
-        }
-
-        .none {
-            display: none;
-        }
-
-        .webgl-content {
-            margin-top: 150px;
-        }
-
-        .relax_btn, button {
-            color: #000;
-            text-rendering: auto;
-            letter-spacing: normal;
-            word-spacing: normal;
-            text-transform: none;
-            text-indent: 0px;
-            text-shadow: none;
-            display: inline-block;
-            text-align: center;
-            align-items: flex-start;
-            cursor: default;
-            box-sizing: border-box;
-            margin: 0em;
-            font: 400 13.3333px Arial;
-            padding: 1px 6px;
-            border-width: 2px;
-            border-style: outset;
-            border-image: initial;
-            background: transparent;
-            border-color: rgb(118,118,118);
-            text-decoration: none;
-        }
-
+        
         .choose{
             display: flex;
             justify-content: center;
@@ -216,6 +176,21 @@
         .disabled > a {
             color: lightgrey;
         }
+        .userInfo_userName {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .userInfo{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .userInfo> p:first-child{
+            margin-right: 5px;
+        }
+
     </style>
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
@@ -263,39 +238,6 @@
         </div>
     </header>
 
-    <main>
-
-        @*<form class="form" name="form">
-            <h1>Login</h1>
-            <div class="input-form">
-                <input type="text" name="email" placeholder="email">
-            </div>
-            <div class="input-form">
-                <input type="password" name="password" placeholder="password">
-            </div>
-            <div class="input-form">
-                <input type="submit" value="Login">
-            </div>
-        </form>
-
-        <form class="form1" name="form1">
-            <h1 title="Форма регистрации на сайте">Registration</h1>
-            <div class="input-form1">
-                <input type="text" name="email" placeholder="email">
-            </div>
-            <div class="input-form1">
-                <input type="text" name="username" placeholder="username">
-            </div>
-            <div class="input-form1">
-                <input type="password" name="password" placeholder="password">
-            </div>
-            <div class="input-form1">
-                <input type="submit" value="Login">
-            </div>
-        </form>*@
-    </main>
-
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -327,21 +269,21 @@
 
                     <form class="signUpModal" name="form1" style="display: none">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingSignUpUserNameInput" placeholder="name@example.com">
+                            <input type="text" class="form-control" name="username" id="floatingSignUpUserNameInput" placeholder="name@example.com">
                             <label for="floatingSignUpUserNameInput">User Name</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingSignUpEmailInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" name="email" id="floatingSignUpEmailInput" placeholder="name@example.com">
                             <label for="floatingSignUpEmailInput">Email</label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="floatingSigUpnPasswordInput" placeholder="name@example.com">
+                            <input type="password" class="form-control" name="password" id="floatingSigUpnPasswordInput" placeholder="name@example.com">
                             <label for="floatingSignUpPasswordInput">Password</label>
                         </div>
 
-                        <button type="submit" class="btn btn-success" style="width: 100%" data-bs-dismiss="modal">Sign Up</button>
+                        <button type="submit" class="btn btn-success" style="width: 100%" >Sign Up</button>
                     </form>
                 </div>
             </div>
@@ -384,7 +326,7 @@
         document.forms["form"].addEventListener("submit", e => {
             e.preventDefault();
 
-            //e.target.style.display = "none";
+            e.target.style.display = "none";
 
             FindUser();
         });
@@ -475,8 +417,7 @@
 
                     //if (userRole.role == "Admin")
                     //    window.location.replace('./Admin')
-                    //else
-                    //    window.location.replace('./Usercab')
+
 
                     UserLoggedCheck();
                 });
