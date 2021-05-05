@@ -1,0 +1,268 @@
+﻿@page
+@model PrivacyModel
+    <!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | OuterCall</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+        var unityInstance = UnityLoader.instantiate("unityContainer", "Build/123.json", { onProgress: UnityProgress });
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        main {
+            margin-top: 86px;
+        }
+
+        input {
+            outline: 0;
+            font-family: inherit;
+            font-size: inherit;
+            vertical-align: middle;
+        }
+
+        .pageHeader {
+            position: fixed;
+            z-index: 26;
+            box-shadow: 0 2px 2px 0 rgb(0 0 0 / 10%);
+            border-bottom: 1px solid #ccc;
+            top: 0;
+            width: 100%;
+            height: 56px;
+            background: #fff;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        .overLayer {
+            top: 0;
+            width: 100%;
+            height: 56px;
+            background: #fff;
+            position: absolute;
+            left: 0;
+            margin: 0;
+        }
+
+        .pageWrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: 0 0;
+            position: relative;
+            max-width: 1212px;
+            min-height: 100%;
+            margin: 0 auto;
+        }
+
+        .logo {
+            padding: 11px 0 0;
+            margin-right: 40px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        #logo {
+            display: inline-block;
+            width: 132px;
+            height: 35px;
+            background-repeat: no-repeat;
+            background-image: url(./TemplateData/ava.jpg);
+            background-size: 100% 100%;
+        }
+
+        .navContainer {
+            position: relative;
+            margin-right: auto;
+        }
+
+        .mainMenu {
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .expandingMenuList {
+            font-size: 0;
+        }
+
+            .expandingMenuList > li {
+                position: relative;
+                font-size: 16px;
+            }
+
+                .expandingMenuList > li:before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 100%;
+                    width: 100%;
+                    height: 2px;
+                    background-color: black;
+                    transition: all .25s ease;
+                    transform-origin: top;
+                    transform: scaleY(0);
+                }
+
+                .expandingMenuList > li:hover:before {
+                    transform: scaleY(1);
+                }
+
+        .buttonPlay {
+            font-size: 16px;
+            display: inline-block;
+            list-style: none;
+            vertical-align: middle;
+            margin: 0;
+        }
+
+        .textLogo {
+            color: #444;
+            position: relative;
+            z-index: 1;
+            display: block;
+            cursor: pointer;
+            font-style: italic;
+        }
+
+            .textLogo > span {
+                position: relative;
+                z-index: 1;
+                display: block;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                height: 56px;
+                background: #fff;
+                padding: 1.2em .7em 0;
+            }
+
+        .expandingMenuTrigger {
+            display: none;
+        }
+    </style>
+</head>
+  <body>
+      <header class="pageHeader">
+          <div class="overLayer"></div>
+
+          <div class="pageWrap">
+              <div class="logo">
+                  <a onclick="EbaloGeki()" id="logo"></a>
+              </div>
+
+              <div class="navContainer">
+                  <nav class="mainMenu ">
+                      <ul class="expandingMenuList">
+                          <li class="buttonPlay" onclick="StartPlay()">
+                              <a class="textLogo">
+                                  <span>Play</span>
+                              </a>
+                          </li>
+                          <li class="buttonPlay">
+                              <a class="textLogo">
+                                  <span>Rules</span>
+                              </a>
+                          </li>
+                          <li class="buttonPlay" onclick="StartAbout()">
+                              <a class="textLogo">
+                                  <span>Info</span>
+                              </a>
+                          </li>
+                          <li class="buttonPlay">
+                              <a class="textLogo">
+                                  <span>Pososi</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </nav>
+              </div>
+          </div>
+      </header>
+      <div class="webgl-content">
+          <div id="unityContainer" style="width: 960px; height: 600px"></div>
+          <div class="footer">
+              <div class="webgl-logo"></div>
+              <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+              <div class="title">OuterCall</div>
+          </div>
+      </div>
+      <script>
+          let token = JSON.parse(localStorage.getItem('token'));
+          let userInfo = parseJwt(token);
+          let userRating;
+
+
+          function getRating() {
+              return fetch(`https://markianpack.azurewebsites.net/api/rating/${userInfo.id}`, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                      'Authorization': 'Bearer ' + token.toString(),
+                      "Access-Control-Allow-Origin": "*"
+                  }
+              })
+                  .then(response => response.json());
+          }
+
+          function StartPlay() {
+              window.location.replace('./game');
+          }
+
+
+          function EbaloGeki() {
+              window.location.replace('./index');
+          }
+
+          function parseJwt(token) {
+              var base64Url = token.split('.')[1];
+              var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+              var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                  return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+              }).join(''));
+
+              return JSON.parse(jsonPayload);
+          };
+
+          getRating()
+              .then(data => {
+                  userRating = data.rating.toString();
+                  Loaded()
+              })
+
+          function Loaded() {
+              unityInstance.SendMessage('JSManager', 'GetNickname', userInfo.userName);
+              unityInstance.SendMessage('JSManager', 'GetScore', userRating);
+          }
+          
+          function GameResult(arg) {
+              let userID = parseJwt(JSON.parse(localStorage.getItem('token')));
+              let ratingInfo = {
+                  userId: userID.id,
+                  rating: arg,
+              }
+              fetch('https://markianpack.azurewebsites.net/api/rating/', {
+                  method: 'POST',
+                  body: JSON.stringify(ratingInfo),
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + token.toString(),
+                      'Accept': 'application/json',
+                      "Access-Control-Allow-Origin": "*"
+                  }
+              })
+          }
+
+      </script>
+  </body>
+</html>
