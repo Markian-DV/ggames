@@ -214,7 +214,7 @@
                                 <span>Play</span>
                             </a>
                         </li>
-                        <li class="header-nav_element">
+                        <li class="header-nav_element" onclick="RulesPlay()">
                             <a class="textLogo">
                                 <span>Rules</span>
                             </a>
@@ -346,11 +346,15 @@
         }
 
         function StartAbout() {
-            window.location.replace('./about');
+            window.location.replace('./info');
         }
 
         function EbaloGeki() {
             window.location.replace('./index');
+        }
+
+        function RulesPlay() {
+            window.location.replace('./rules');
         }
 
         function parseJwt(token) {
