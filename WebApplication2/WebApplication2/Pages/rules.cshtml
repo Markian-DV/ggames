@@ -200,6 +200,9 @@
             font-size: 10px;
             font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
         }
+        body {
+            background-color: #d6d6d6;
+        }
 
         main {
             margin: 0 auto;
@@ -214,7 +217,6 @@
 
         .post-container {
             margin-top: 10rem;
-            background-color: lightgray;
             border-radius: .3rem;
             overflow: hidden;
             padding: 3rem;
@@ -222,40 +224,45 @@
 
         .post-preview-component {
             width: 100%;
+            text-align: center;
+
+            display: block;
+            padding: 2.5rem;
+            background-color: white;
+            border-radius: 5px;
+            
         }
 
-            .post-preview-component:not(:last-child) p {
+            .post-preview-component:not(:last-child) {
                 margin-bottom: 3rem;
             }
 
         .post-preview-image {
-            position: center;
-            display: flex;
-            margin-bottom: 3rem;
-            padding-bottom: 56.25%;
+            display: block;
+            margin: 0 auto;
+            width: 401px;
+            height: 401px;
+
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid lightgrey;
         }
 
         .post-preview-thumbnail {
-            position: absolute;
             width: 100%;
             height: 100%;
-            -o-object-fit: cover;
-            object-fit: cover;
         }
 
         .post-preview-titlecontainer {
-            display: flex;
-            align-items: center;
             font-weight: 600;
             font-size: 1.8rem;
             color: #26211b;
             margin: 0;
+            margin-top: 1rem;
             padding: 0;
         }
 
         .post-preview-title {
             font-size: 2.4rem;
-
         }
 
         .post-preview-meta-component {
@@ -300,10 +307,7 @@
         }
 
         .post-preview-excerpt {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
             overflow: hidden;
-            text-overflow: ellipsis;
             max-height: 6rem;
             word-break: break-word;
             font-size: 1.4rem;
@@ -315,12 +319,9 @@
         .btn {
             font-size: 1.7rem;
         }
-        .post-preview-thumbnail {
-            width: 401px;
-            height: 401px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+
+        .userAuthorization:not(:last-child) {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -348,7 +349,7 @@
                         </li>
                         <li class="header-nav_element" onclick="StartAbout()">
                             <a class="textLogo">
-                                <span>Info</span>
+                                <span>News</span>
                             </a>
                         </li>
                     </ul>
@@ -358,29 +359,21 @@
             <button type="button" class="btn btn-primary userAuthorization" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Sign-In
             </button>
+            <button type="button" class="btn btn-primary signUpBtn" data-bs-toggle="modal" data-bs-target="#signUpModal">
+                Sign-Up
+            </button>
 
-            <div class="userInfo" style="display: none">
+            <div class="userInfo" style="display: none" onclick="AdminCab()">
                 <p class="userInfo_userName"></p>
-
-                <button type="button" class="btn btn-warning" onclick="SignOut()">Sign Out</button>
             </div>
         </div>
     </header>
 
-
+    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-
-                    <div class="choose">
-                        <div class="input-form">
-                            <button type="button" class="btn btn-primary choose_sign-in disabled" onclick="F1()">Sign-In</button>
-                        </div>
-                        <div class="input-form">
-                            <button type="button" class="btn btn-primary choose_sign-up" onclick="F3()">Sign-Up</button>
-                        </div>
-                    </div>
 
                     <form class="signInModal" name="form">
                         <div class="form-floating mb-3">
@@ -395,8 +388,17 @@
 
                         <button type="submit" class="btn btn-success" style="width: 100%">Sign In</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <form class="signUpModal" name="form1" style="display: none">
+    <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <form class="signUpModal" name="form1">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" name="username" id="floatingSignUpUserNameInput" placeholder="name@example.com">
                             <label for="floatingSignUpUserNameInput">User Name</label>
@@ -424,66 +426,66 @@
 
         <div class="post-container">
             <acticle class="post-preview-component">
-                <a href="#" class="post-preview-image">
-                    <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpHLaEcZ.gif" class="post-preview-thumbnail" >
-                </a>
+                <div class="post-preview-image">
+                    <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpHLaEcZ.gif" class="post-preview-thumbnail">
+                </div>
                 <h2 class="post-preview-titlecontainer">
-                    <a href="#" class="post-preview-title">King moves</a>
+                    <span class="post-preview-title">King moves</span>
                 </h2>
                 <p class="post-preview-excerpt">
                     King can move exactly one square horizontally, vertically, or diagonally. At most once in every game, each king is allowed to make a special move, known as castling.
                 </p>
             </acticle>
             <acticle class="post-preview-component">
-                <a href="#" class="post-preview-image">
+                <div class="post-preview-image">
                     <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpgpXYlQ.gif" class="post-preview-thumbnail">
-                </a>
+                </div>
                 <h2 class="post-preview-titlecontainer">
-                    <a href="#" class="post-preview-title">Queen moves</a>
+                    <span class="post-preview-title">Queen moves</span>
                 </h2>
                 <p class="post-preview-excerpt">
                     Queen can move any number of vacant squares diagonally, horizontally, or vertically.
                 </p>
             </acticle>
             <acticle class="post-preview-component">
-                <a href="#" class="post-preview-image">
+                <div class="post-preview-image">
                     <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpHlPkaE.gif" class="post-preview-thumbnail">
-                </a>
+                </div>
                 <h2 class="post-preview-titlecontainer">
-                    <a href="#" class="post-preview-title">Rook moves</a>
+                    <span class="post-preview-title">Rook moves</span>
                 </h2>
                 <p class="post-preview-excerpt">
                     Rook can move any number of vacant squares vertically or horizontally. It also is moved while castling.
                 </p>
             </acticle>
             <acticle class="post-preview-component">
-                <a href="#" class="post-preview-image">
+                <div class="post-preview-image">
                     <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpOYVVvo.gif" class="post-preview-thumbnail">
-                </a>
+                </div>
                 <h2 class="post-preview-titlecontainer">
-                    <a href="#" class="post-preview-title">Bishop moves</a>
+                    <span class="post-preview-title">Bishop moves</span>
                 </h2>
                 <p class="post-preview-excerpt">
                     Bishop can move any number of vacant squares in any diagonal direction.
                 </p>
             </acticle>
             <acticle class="post-preview-component">
-                <a href="#" class="post-preview-image">
+                <div class="post-preview-image">
                     <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpMl2vJy.gif" class="post-preview-thumbnail">
-                </a>
+                </div>
                 <h2 class="post-preview-titlecontainer">
-                    <a href="#" class="post-preview-title">Knight moves</a>
+                    <span class="post-preview-title">Knight moves</span>
                 </h2>
                 <p class="post-preview-excerpt">
                     Knight can move one square along any rank or file and then at an angle. The knight´s movement can also be viewed as an “L” or “7″ laid out at any horizontal or vertical angle.
                 </p>
             </acticle>
             <acticle class="post-preview-component">
-                <a href="#" class="post-preview-image">
+                <div class="post-preview-image">
                     <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/erik/phpHVosJK.gif" class="post-preview-thumbnail">
-                </a>
+                </div>
                 <h2 class="post-preview-titlecontainer">
-                    <a href="#" class="post-preview-title">Pawns moves</a>
+                    <span class="post-preview-title">Pawns moves</span>
                 </h2>
                 <p class="post-preview-excerpt">
                     Pawns can move forward one square, if that square is unoccupied. If it has not yet moved, the pawn has the option of moving two squares forward provided both squares in front of the pawn are unoccupied. A pawn cannot move backward. Pawns are the only pieces that capture differently from how they move. They can capture an enemy piece on either of the two spaces adjacent to the space in front of them (i.e., the two squares diagonally in front of them) but cannot move to these spaces if they are vacant. The pawn is also involved in the two special moves en passant and promotion.
@@ -498,6 +500,7 @@
             const USER_INFO_USERNAME = document.querySelector('.userInfo_userName');
             const PLAY_BTN = document.querySelector('.playBtn');
             const USER_AUTHORIZATION = document.querySelector('.userAuthorization');
+            const SIGN_UP_BTN = document.querySelector('.signUpBtn');
 
             if (localStorage.getItem('token')) {
                 let info = parseJwt(localStorage.getItem('token'));
@@ -506,26 +509,138 @@
                 USER_INFO_USERNAME.innerHTML = `<p>${info.userName}</p>`;
                 PLAY_BTN.classList.remove('disabled');
                 USER_AUTHORIZATION.style.display = 'none';
+                SIGN_UP_BTN.style.display = 'none';
             }
             else {
                 PLAY_BTN.classList.add('disabled');
                 USER_INFO.style.display = 'none';
                 USER_AUTHORIZATION.style.display = '';
+                SIGN_UP_BTN.style.display = '';
             }
         }
 
         UserLoggedCheck();
 
-        function StartAbout() {
-            window.location.replace('./info');
+        function F1() {
+
+            document.querySelector('.choose > .input-form > button.choose_sign-up').classList.remove('disabled');
+            event.target.classList.add('disabled');
+
+            document.querySelector('.signUpModal').style.display = 'none';
+            document.querySelector('.signInModal').style.display = '';
         }
+
+        document.forms["form"].addEventListener("submit", e => {
+            e.preventDefault();
+
+            e.target.style.display = "none";
+
+            FindUser();
+        });
+
+        function F3() {
+
+            document.querySelector('.choose > .input-form > button.choose_sign-in').classList.remove('disabled');
+            event.target.classList.add('disabled');
+
+            document.querySelector('.signInModal').style.display = 'none';
+            document.querySelector('.signUpModal').style.display = '';
+        }
+
+        document.forms["form1"].addEventListener("submit", e => {
+            e.preventDefault();
+            console.log('event Listener');
+
+            e.target.style.display = "none";
+
+            AddNewUser();
+        })
 
         function StartPlay() {
             window.location.replace('./game');
         }
 
+        function RulesPlay() {
+            window.location.replace('./rules');
+        }
+
+        function StartAbout() {
+            window.location.replace('./news');
+        }
+
+
         function EbaloGeki() {
             window.location.replace('./index');
+        }
+
+        function AdminCab() {
+            let userRole = parseJwt(localStorage.getItem("token"));
+
+            if (userRole.role == "Admin")
+                window.location.replace('./Admin')
+            else
+                window.location.replace('./UserCab')
+        }
+
+        function AddNewUser() {
+            let form = document.forms["form1"]
+            let newUser = {
+                email: form.elements["email"].value,
+                username: form.elements["username"].value,
+                password: form.elements["password"].value,
+            }
+
+            console.log(newUser);
+
+            fetch(
+                'https://markianpack.azurewebsites.net/api/auth/register', {
+                method: 'POST',
+                body: JSON.stringify(newUser),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+        }
+
+        function FindUser() {
+            let form = document.forms["form"];
+
+            let userInfo = {
+                email: form.elements["email"].value,
+                password: form.elements["password"].value,
+            }
+
+            let userRole;
+
+            fetch(
+                'https://markianpack.azurewebsites.net/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(userInfo),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem('token', JSON.stringify(data.token));
+                    console.log(data.token);
+
+                    userRole = parseJwt(data.token);
+
+                    //if (userRole.role == "Admin")
+                    //    window.location.replace('./Admin')
+
+
+                    UserLoggedCheck();
+                });
         }
 
         function parseJwt(token) {
@@ -539,6 +654,12 @@
 
             return JSON.parse(jsonPayload);
         };
+
+        function SignOut() {
+            localStorage.removeItem('token');
+
+            UserLoggedCheck();
+        }
 
     </script>
     <script src="https://kit.fontawesome.com/9135621f22.js" crossorigin="anonymous"></script>

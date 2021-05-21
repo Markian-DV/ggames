@@ -11,7 +11,11 @@
             font-family: sans-serif;
         }
 
-        .table   {
+        a {
+            text-decoration: none;
+        }
+
+        main {
             margin-top: 86px;
         }
 
@@ -20,6 +24,14 @@
             font-family: inherit;
             font-size: inherit;
             vertical-align: middle;
+        }
+
+        ul {
+            margin-bottom: 0;
+        }
+
+        p {
+            margin: 0;
         }
 
         .pageHeader {
@@ -52,12 +64,11 @@
             background: 0 0;
             position: relative;
             max-width: 1212px;
-            min-height: 100%;
+            height: 100%;
             margin: 0 auto;
         }
 
         .logo {
-            padding: 11px 0 0;
             margin-right: 40px;
         }
 
@@ -66,8 +77,8 @@
             width: 132px;
             height: 35px;
             background-repeat: no-repeat;
-            background-image: url(./TemplateData/ava.jpg);
-            background-size: 100% 100%;
+            background-image: url(./TemplateData/ava.png);
+            background-size: 70% 100%;
         }
 
         .navContainer {
@@ -84,29 +95,29 @@
             font-size: 0;
         }
 
-        .expandingMenuList > li {
-            position: relative;
-            font-size: 16px;
-        }
+            .expandingMenuList > li {
+                position: relative;
+                font-size: 16px;
+            }
 
-        .expandingMenuList > li:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 100%;
-            width: 100%;
-            height: 2px;
-            background-color: black;
-            transition: all .25s ease;
-            transform-origin: top;
-            transform: scaleY(0);
-        }
+                .expandingMenuList > li:before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 100%;
+                    width: 100%;
+                    height: 2px;
+                    background-color: black;
+                    transition: all .25s ease;
+                    transform-origin: top;
+                    transform: scaleY(0);
+                }
 
-        .expandingMenuList > li:hover:before {
-            transform: scaleY(1);
-        }
+                .expandingMenuList > li:hover:before {
+                    transform: scaleY(1);
+                }
 
-        .buttonPlay {
+        .header-nav_element {
             font-size: 16px;
             display: inline-block;
             list-style: none;
@@ -123,21 +134,58 @@
             font-style: italic;
         }
 
-        .textLogo > span {
-            position: relative;
-            z-index: 1;
-            display: block;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            height: 56px;
-            background: #fff;
-            padding: 1.2em .7em 0;
-        }
+            .textLogo > span {
+                position: relative;
+                z-index: 1;
+                display: block;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                height: 56px;
+                background: #fff;
+                padding: 1.2em .7em 0;
+            }
 
         .expandingMenuTrigger {
             display: none;
         }
+
+        .choose {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .choose > .input-form {
+                margin: 15px 10px;
+            }
+
+        .disabled {
+            pointer-events: none;
+            opacity: .5;
+        }
+
+            .disabled > a {
+                color: lightgrey;
+            }
+
+        .userInfo_userName {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .userInfo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .userInfo > p:first-child {
+                margin-right: 5px;
+            }
     </style>
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
 </head>
 <body>
     <header class="pageHeader">
@@ -145,30 +193,25 @@
 
         <div class="pageWrap">
             <div class="logo">
-                <a href="#" id="logo"></a>
+                <a onclick="EbaloGeki()" id="logo"></a>
             </div>
 
             <div class="navContainer">
                 <nav class="mainMenu ">
                     <ul class="expandingMenuList">
-                        <li class="buttonPlay" onclick="StartPlay()">
+                        <li class="header-nav_element playBtn disabled" onclick="StartPlay()">
                             <a class="textLogo">
                                 <span>Play</span>
                             </a>
                         </li>
-                        <li class="buttonPlay">
+                        <li class="header-nav_element" onclick="RulesPlay()">
                             <a class="textLogo">
                                 <span>Rules</span>
                             </a>
                         </li>
-                        <li class="buttonPlay" onclick="StartAbout()">
+                        <li class="header-nav_element" onclick="StartAbout()">
                             <a class="textLogo">
-                                <span>Info</span>
-                            </a>
-                        </li>
-                        <li class="buttonPlay">
-                            <a class="textLogo">
-                                <span>Pososi</span>
+                                <span>News</span>
                             </a>
                         </li>
                     </ul>
@@ -176,111 +219,124 @@
             </div>
         </div>
     </header>
-    <table class="table">
+            <main>
+                <div class="container">
+                    <table class="table">
 
-        <thead>
-            <tr>
-                <th scope="col">User Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Promote</th>
-                <th scope="col">Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+                        <thead>
+                            <tr>
+                                <th scope="col">User Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Promote</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
 
-    </table>
+                    </table>
 
-    <script>
-        let token = JSON.parse(localStorage.getItem('token'));
-        let users = [];
+                </div>
+            </main>
 
-        function getUsers(token) {
-            fetch('https://markianpack.azurewebsites.net/api/users', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + token.toString(),
-                    "Access-Control-Allow-Origin": "*"
+            <script>
+                let token = JSON.parse(localStorage.getItem('token'));
+                let users = [];
+
+                function getUsers(token) {
+                    fetch('https://markianpack.azurewebsites.net/api/users', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer ' + token.toString(),
+                            "Access-Control-Allow-Origin": "*"
+                        }
+                    })
+                        .then(data => data.json())
+                        .then(users => {
+                            users = users;
+
+                            document.querySelector('.table > tbody').innerHTML = '';
+                            for (user of users) {
+                                let tr = document.createElement('tr');
+
+                                let userInfo =
+                                    `
+                                                    <td>${user.userName}</td>
+                                                    <td>${user.email}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-warning" onclick="promoteUser()" data-email="${user.email}">Promote</button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" onclick="deleteUser()" data-user-id="${user.id}">Delete</button>
+                                                    </td>
+                                                `;
+
+                                tr.innerHTML = userInfo;
+
+                                document.querySelector('.table > tbody').appendChild(tr);
+                            }
+                        });
                 }
-            })
-                .then(data => data.json())
-                .then(users => {
-                    users = users;
+                function StartPlay() {
+                    window.location.replace('./game');
+                }
 
-                    document.querySelector('.table > tbody').innerHTML = '';
-                    for (user of users) {
-                        let tr = document.createElement('tr');
+                function RulesPlay() {
+                    window.location.replace('./rules');
+                }
 
-                        let userInfo =
-                            `
-                                        <td>${user.userName}</td>
-                                        <td>${user.email}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-warning" onclick="promoteUser()" data-email="${user.email}">Promote</button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" onclick="deleteUser()" data-user-id="${user.id}">Delete</button>
-                                        </td>
-                                    `;
+                function StartAbout() {
+                    window.location.replace('./news');
+                }
 
-                        tr.innerHTML = userInfo;
 
-                        document.querySelector('.table > tbody').appendChild(tr);
+                function EbaloGeki() {
+                    window.location.replace('./index');
+                }
+
+                function promoteUser() {
+                    let userEmail = {
+                        email: event.target.dataset.email,
                     }
-                });
-        }
 
-        function StartPlay() {
-            window.location.replace('./game');
-        }
+                    fetch('https://markianpack.azurewebsites.net/api/users/', {
+                        method: 'POST',
+                        body: JSON.stringify(userEmail),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer ' + token.toString(),
+                            "Access-Control-Allow-Origin": "*"
+                        }
+                    })
+                        .then(() => {
+                            console.log('user promoted');
 
-        function StartAbout() {
-            window.location.replace('./about');
-        }
-
-        function promoteUser() {
-            let userEmail = {
-                email: event.target.dataset.email,
-            }
-
-            fetch('https://markianpack.azurewebsites.net/api/users/', {
-                method: 'POST',
-                body: JSON.stringify(userEmail),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + token.toString(),
-                    "Access-Control-Allow-Origin": "*"
+                            getUsers(token);
+                        });
                 }
-            })
-                .then(() => {
-                    console.log('user promoted');
 
-                    getUsers(token);
-                });
-        }
+                function deleteUser() {
+                    let userID = event.target.dataset.userId;
 
-        function deleteUser() {
-            let userID = event.target.dataset.userId;
-
-            fetch(`https://markianpack.azurewebsites.net/api/users/${userID}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + token.toString(),
-                    "Access-Control-Allow-Origin": "*"
+                    fetch(`https://markianpack.azurewebsites.net/api/users/${userID}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer ' + token.toString(),
+                            "Access-Control-Allow-Origin": "*"
+                        }
+                    })
+                        .then(() => {
+                            getUsers(token);
+                        })
                 }
-            })
-                .then(() => {
-                    getUsers(token);
-                })
-        }
 
-        getUsers(token);
+                getUsers(token);
 
-    </script>
+            </script>
 </body>
 </html>

@@ -26,6 +26,9 @@
 
         main {
             margin-top: 86px;
+            margin: 0 auto;
+            max-width: 750px;
+            padding: 1.5rem;
         }
 
         input {
@@ -190,7 +193,202 @@
         .userInfo> p:first-child{
             margin-right: 5px;
         }
+        .userAuthorization:not(:last-child) {
+            margin-right: 5px;
+        }
 
+        .post-container {
+            margin-top: 10rem;
+            background-color: white;
+            border-radius: .3rem;
+            overflow: hidden;
+            padding: 3rem;
+            margin-bottom:3rem;
+        }
+
+        .post-preview-component {
+            width: 100%;
+        }
+
+            .post-preview-component:not(:last-child) p {
+                margin-bottom: 3rem;
+            }
+
+        .post-preview-image {
+            position: relative;
+            display: flex;
+            margin-bottom: 1.2rem;
+            padding-bottom: 56.25%;
+            background-color: #dbd9d7;
+        }
+
+        .post-preview-thumbnail {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -o-object-fit: cover;
+            object-fit: cover;
+        }
+
+        .post-preview-titlecontainer {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: #26211b;
+            margin: 0;
+            padding: 0;
+        }
+
+        .post-preview-title {
+            font-size: 2.4rem;
+        }
+
+        .post-preview-meta-component {
+            align-items: center;
+            color: #8b8987;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 1.3rem;
+        }
+
+        .post-preview-meta {
+            margin-top: .5rem;
+        }
+
+        .post-preview-meta-title {
+            background-color: #b33430;
+            border-radius: .3rem;
+            color: #fff;
+            font-size: .9rem;
+            font-weight: 600;
+            line-height: 1;
+            padding: .2rem .3rem;
+            margin-right: .3rem;
+        }
+
+        .post-preview-meta-username {
+            color: #8b8987;
+            font-weight: 600;
+        }
+
+        .post-preview-meta-time {
+            display: flex;
+            align-items: center;
+        }
+
+        .post-preview-meta-separator {
+            padding: 0 .4rem;
+        }
+
+        .post-preview-meta-content {
+            margin-left: .4rem;
+        }
+
+        .post-preview-excerpt {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            text-overflow: ellipsis;
+            min-height: 0rem;
+            word-break: break-word;
+            font-size: 1.4rem;
+            line-height: 2rem;
+            margin-top: .5rem;
+            color: #312e2b;
+        }
+            
+        .section-container-component {
+            background-color: #fff;
+            border-radius: .3rem;
+            overflow: hidden;
+        }
+
+        .section-content-component {
+            padding: 1.5rem;
+        }
+
+        .post-category-header-component {
+            padding: 1.5rem 1.5rem 0;
+            align-items: center;
+            display: flex;
+        }
+        .post-category-header-title {
+            font-size: 2.4rem;
+        }
+        .post-preview-list-component {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+        }
+        .post-author-component {
+            width: 100%;
+            display: flex;  
+        }
+        .post-author-thumbnail {
+            -o-object-fit: cover;
+            object-fit: cover;
+        }
+        .post-author-right {
+            flex-grow: 1;
+            padding: 0 0 0 1.5rem;
+        }
+        .master-players-player-title {
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+        }
+        .post-author-meta {
+            color: var(--globalColorThemeLow);
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            font-size: 1.3rem;
+            margin: .7rem 0;
+        }
+        .master-players-player-name {
+            margin-right: 1rem;
+        }
+        .master-players-chess-title {
+            background-color: #b33430;
+            border-radius: .3rem;
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 600;
+            line-height: 1;
+            padding: .2rem .3rem;
+            margin-right: .3rem;
+        }
+        .post-author-name {
+            color: var(--globalColorThemeBlueToMid);
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+        .master-players-world-stats {
+            color: var(--globalColorThemeLink);
+            display: block;
+            font-size: 1.6rem;
+            white-space: nowrap;
+        }
+        .post-author-about {
+            color: var(--globalColorThemeMid);
+            font-size: 1.3rem;
+            line-height: 2rem;
+            margin: 0 0 .5rem;
+            word-break: break-word;
+        }
     </style>
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
@@ -219,7 +417,7 @@
                         </li>
                         <li class="header-nav_element" onclick="StartAbout()">
                             <a class="textLogo">
-                                <span>Info</span>
+                                <span>News</span>
                             </a>
                         </li>
                     </ul>
@@ -229,11 +427,12 @@
             <button type="button" class="btn btn-primary userAuthorization" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Sign-In
             </button>
+            <button type="button" class="btn btn-primary signUpBtn" data-bs-toggle="modal" data-bs-target="#signUpModal">
+                Sign-Up
+            </button>
 
-            <div class="userInfo" style="display: none">
+            <div class="userInfo" style="display: none" onclick="AdminCab()">
                 <p class="userInfo_userName"></p>
-                
-                <button type="button" class="btn btn-warning" onclick="SignOut()">Sign Out</button>
             </div>
         </div>
     </header>
@@ -241,18 +440,8 @@
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">            
+            <div class="modal-content">
                 <div class="modal-body">
-
-                    <div class="choose">
-                        <div class="input-form">
-                            <button type="button" class="btn btn-primary choose_sign-in disabled" onclick="F1()">Sign-In</button>
-                        </div>
-                        <div class="input-form">
-                            <button type="button" class="btn btn-primary choose_sign-up" onclick="F3()">Sign-Up</button>
-                        </div>
-                    </div>
-
                     <form class="signInModal" name="form">
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control" name="email" id="floatingSignInUserNameInput" placeholder="name@example.com">
@@ -266,8 +455,17 @@
 
                         <button type="submit" class="btn btn-success" style="width: 100%">Sign In</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <form class="signUpModal" name="form1" style="display: none">
+    <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <form class="signUpModal" name="form1">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" name="username" id="floatingSignUpUserNameInput" placeholder="name@example.com">
                             <label for="floatingSignUpUserNameInput">User Name</label>
@@ -283,36 +481,306 @@
                             <label for="floatingSignUpPasswordInput">Password</label>
                         </div>
 
-                        <button type="submit" class="btn btn-success" style="width: 100%" >Sign Up</button>
+                        <button type="submit" class="btn btn-success" style="width: 100%">Sign Up</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
+    
+    <main>
+
+        <div class="post-container">
+            <acticle class="post-preview-component">
+                <div class="post-preview-image">
+                    <img src="https://cdn.britannica.com/57/162657-131-504FE019/Chess-pieces-game-board.jpg" class="post-preview-thumbnail">
+                </div>
+                <h2 class="post-preview-titlecontainer">
+                    <span class="post-preview-title">What is chess?</span>
+                </h2>
+                <div class="post-preview-meta">
+                    <div class="post-preview-meta-component">
+                        <div class="post-preview-meta-time">
+                        </div>
+                    </div>
+                </div>
+                <p class="post-preview-excerpt">
+                    Chess, one of the oldest and most popular board games, played by two opponents on a checkered board with specially designed pieces of contrasting colours, commonly white and black. White moves first, after which the players alternate turns in accordance with fixed rules, each player attempting to force the opponent’s principal piece, the King, into checkmate—a position where it is unable to avoid capture.
+                </p>
+            </acticle>
+        </div>
+        <section class="section-container-component">
+            <div class="section-content-component">
+                <header class="post-category-header-component authors-header">
+                    <h1 class="post-category-header-title">
+                        The best chess players in the world
+                    </h1>
+                </header>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/3b0ddf4e-bd82-11e8-9421-af517c2ebfed.1e700464.160x160o.70a846b1599b.jpeg" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Magnus Carlsen
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2847 | #1
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Norway
+                            </div>
+                            <p class="post-author-about">
+                                GM Magnus Carlsen is the current world chess champion. To many people, he’s the best to ever play the game, although GMs Garry Kasparov and Bobby Fischer remain in the conversation. At any rate, the clear and remarkable point is that before turning 30 years old, Carlsen has already earned a spot at the top.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/c66cb17a-c005-11e8-886b-692f3468f8e7.f0f38737.160x160o.3bf67246d292.png" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Fabiano Caruana
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2820 | #2
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                United States
+                            </div>
+                            <p class="post-author-about">
+                                The prodigy who broke the record held by GM Hikaru Nakamura for America's youngest chess grandmaster, Fabiano Caruana, has climbed the mountain of chess and reached the summit. This grandmaster has had a ranking as high as number-two in the world and has won numerous tournaments in his career. In 2018 the American faced GM Magnus Carlsen at the World Chess Championship in London in 2018, losing in the tiebreak playoffs
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/00ffadde-d6a8-11e8-bdb9-933b839db343.c693ec2d.160x160o.5015d8cb0fba.png" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Ding Liren
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2799 | #3
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                China
+                            </div>
+                            <p class="post-author-about">
+                                Ding Liren is a Chinese super grandmaster who many people consider to be a primary contender for Magnus Carlsen’s world title. Ding won his first Chinese Chess Championship at the age of 16, making him the youngest to ever do so. In the 2017 and 2019 Chess World Cup, he became the first player in history to reach the finals twice in a row. The latter result means that Ding would play in the 2020 Candidates Tournament, which decided who gets a shot at the world title.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/cf02cd92-c0a0-11e8-b780-451d887b5ef3.57ae3620.160x160o.ca63ee02b16c.png" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Ian Nepomniachtchi
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2792 | #4
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Russia
+                            </div>
+                            <p class="post-author-about">
+                                GM Ian Nepomniachtchi (“Nepo” for short) is a Russian super grandmaster who won the 2020/21 Candidates Tournament and will face GM Magnus Carlsen for the world championship. Nepomniachtchi has a brilliant record against world champions. At standard time controls, he has positive scores against GM Vladimir Kramnik (+5 -4 =4), GM Viswanathan Anand (+3 -2 =5) and even Carlsen (+4 -1 =6, with two wins coming during their youth careers). He also has positive records against GM Anatoly Karpov (+2 -0 =0 in 2013) and GM Garry Kasparov (+1 -0 =2 in 2017) in rapid/blitz, the only formats he has played them in.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/4118050c-c004-11e8-bb10-a1a4e591dae7.1cb2c9a8.160x160o.d0079d7ad94e.jpeg" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Levon Aronian
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2781 | #5
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Armenia
+                            </div>
+                            <p class="post-author-about">
+                                Levon Aronian is an Armenian (soon to be U.S.) super grandmaster who has long been among the world’s best players. He first entered the top 20 in 2005 and still hasn’t lost that distinction. Most of those 15 years or so have been spent in the top 10.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/93222764-bd80-11e8-b51a-fd14c22a36df.b3755be5.160x160o.e2e15cb8eb25.png" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Anish Giri
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2780 | #6
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Netherlands
+                            </div>
+                            <p class="post-author-about">
+                                GM Anish Giri is a four-time Dutch champion and a world-class player. He has been ranked as high as number three in the world and reached his peak rating of 2802 on February 15, 2015. Giri has represented the Netherlands at the Olympiads since 2010. He won the 2012 Reggio Emilia tournament and the 2017 Reykjavik Open. He scored his first major victory at the Shenzhen Masters in the summer of 2019 and in March 2021 he won the Magnus Carlsen Invitational.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/11a5e2b6-c005-11e8-8f74-894171089772.f54916ef.160x160o.c775ecf604a5.png" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Alexander Grischuk
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2776 | #7
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Russia
+                            </div>
+                            <p class="post-author-about">
+                                Alexander Grischuk is a Russian super grandmaster who is consistently among the world’s best players. While he’s an elite professional chess player, Grischuk is well-known for being one of the top blitz players. He’s a three-time World Blitz Champion, making him only one of two players to have multiple world titles in blitz time controls. The other player is Magnus Carlsen (with four titles), who’s widely recognized as one of the best chess players of all time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/d1da994a-c00b-11e8-ae3d-67e3121970db.0ffa8f0a.160x160o.7ed711a1126c.jpeg" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Wesley So
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2770 | #8
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                United States
+                            </div>
+                            <p class="post-author-about">
+                                Wesley So is a Filipino-American super grandmaster who is among the world’s best chess players. He began as a chess prodigy who entered tournaments at nine years old. At 14, he became the ninth youngest GM in history. The next year, he became the youngest player to pass the 2600 rating threshold, breaking Magnus Carlsen’s record.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/49070142-c00d-11e8-9efd-03a2cb777504.37e12dda.160x160o.2bd731a16e78.jpeg" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Shakhriyar Mamedyarov
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2770 | #8
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Azerbaijan
+                            </div>
+                            <p class="post-author-about">
+                                Shakhriyar Mamedyarov is a super-grandmaster from Azerbaijan. He was the number-two ranked player in the world in the FIDE ratings list of February 2018. According to 2700chess.com, Mamedyarov reached his peak rating of 2826 on September 30, 2018—the sixth-highest rating of all time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-preview-list-component authors-list">
+                    <div class="post-author-component authors-post">
+                        <a class="post-author-avatar" title="Magnus Carlsen">
+                            <img class=" post-author-thumbnail" src="https://images.chesscomfiles.com/uploads/v1/master_player/15dc583e-9d99-11e9-acb3-2943cca8973d.090601ab.160x160o.be6e59853024.jpeg" height="160" width="160" />
+                        </a>
+                        <div class="post-author-right">
+                            <h2 class="post-author-author master-players-player-title">
+                                <a class="master-players-player-name">
+                                    <span class="master-players-chess-title">ГМ</span>
+                                    <span class="post-author-name">
+                                        Teimour Radjabov
+                                    </span>
+                                </a>
+                                <a class="master-players-world-stats">
+                                    2765 | #10
+                                </a>
+                            </h2>
+                            <div class="post-author-meta">
+                                Azerbaijan
+                            </div>
+                            <p class="post-author-about">
+                                Teimur Radjabov was born in Baku, Azerbaijan—the same city as former world champion Garry Kasparov—on March 12, 1987. Radjabov’s promising youth career translated into runs at the FIDE world championship in his teens and the reunified championship in the 2010’s.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
     <script>
-        function UserLoggedCheck() {
-            const USER_INFO = document.querySelector('.userInfo');
-            const USER_INFO_USERNAME = document.querySelector('.userInfo_userName');
-            const PLAY_BTN = document.querySelector('.playBtn');
-            const USER_AUTHORIZATION = document.querySelector('.userAuthorization');
-
-            if (localStorage.getItem('token')) {
-                let info = parseJwt(localStorage.getItem('token'));
-
-                USER_INFO.style.display = '';
-                USER_INFO_USERNAME.innerHTML = `<p>${info.userName}</p>`;
-                PLAY_BTN.classList.remove('disabled');
-                USER_AUTHORIZATION.style.display = 'none';
-            }
-            else {
-                PLAY_BTN.classList.add('disabled');
-                USER_INFO.style.display = 'none';
-                USER_AUTHORIZATION.style.display = '';
-            }
-        }
-
-        UserLoggedCheck();
 
         function F1() {
 
@@ -338,11 +806,10 @@
 
             document.querySelector('.signInModal').style.display = 'none';
             document.querySelector('.signUpModal').style.display = '';
-        }   
+        }
 
         document.forms["form1"].addEventListener("submit", e => {
             e.preventDefault();
-            console.log('event Listener');
 
             e.target.style.display = "none";
 
@@ -358,12 +825,21 @@
         }
 
         function StartAbout() {
-            window.location.replace('./info');
+            window.location.replace('./news');
         }
 
 
         function EbaloGeki() {
             window.location.replace('./index');
+        }
+
+        function AdminCab() {
+            let userRole = parseJwt(localStorage.getItem("token"));
+
+            if (userRole.role == "Admin")
+                window.location.replace('./UserCab')
+            else
+                window.location.replace('./UserCab')
         }
 
         function AddNewUser() {
@@ -427,12 +903,6 @@
                 });
         }
 
-        function SignOut() {
-            localStorage.removeItem('token');
-
-            UserLoggedCheck();
-        }
-
 
         function parseJwt(token) {
             var base64Url = token.split('.')[1];
@@ -445,6 +915,33 @@
 
             return JSON.parse(jsonPayload);
         };
+
+        function UserLoggedCheck() {
+            const USER_INFO = document.querySelector('.userInfo');
+            const USER_INFO_USERNAME = document.querySelector('.userInfo_userName');
+            const PLAY_BTN = document.querySelector('.playBtn');
+            const USER_AUTHORIZATION = document.querySelector('.userAuthorization');
+            const SIGN_UP_BTN = document.querySelector('.signUpBtn');
+
+            if (localStorage.getItem('token')) {
+                let info = parseJwt(localStorage.getItem('token'));
+
+                USER_INFO.style.display = '';
+                USER_INFO_USERNAME.innerHTML = `<p>${info.userName}</p>`;
+                PLAY_BTN.classList.remove('disabled');
+                USER_AUTHORIZATION.style.display = 'none';
+                SIGN_UP_BTN.style.display = 'none';
+            }
+            else {
+                PLAY_BTN.classList.add('disabled');
+                USER_INFO.style.display = 'none';
+                USER_AUTHORIZATION.style.display = '';
+                SIGN_UP_BTN.style.display = '';
+            }
+        }
+
+        UserLoggedCheck();
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </body>

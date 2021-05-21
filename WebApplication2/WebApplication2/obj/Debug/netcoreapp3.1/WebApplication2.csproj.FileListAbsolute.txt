@@ -59,7 +59,6 @@ C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\WebApplication2.RazorCoreGenerate.cache
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\Admin.cshtml.g.cs
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\Game.cshtml.g.cs
-C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\Index.cshtml.g.cs
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\_Layout.cshtml.g.cs
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\Shared\_ValidationScriptsPartial.cshtml.g.cs
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\_ViewImports.cshtml.g.cs
@@ -72,4 +71,6 @@ C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\WebApplication2.csproj.CopyComplete
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\WebApplication2.csprojAssemblyReference.cache
 C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\rules.cshtml.g.cs
-C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\info.cshtml.g.cs
+C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\UserCab.cshtml.g.cs
+C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\news.cshtml.g.cs
+C:\Users\38050\Downloads\WebApplication2 (1)\WebApplication2\WebApplication2\obj\Debug\netcoreapp3.1\Razor\Pages\index.cshtml.g.cs

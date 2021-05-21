@@ -1,0 +1,388 @@
+﻿@page
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Admin Cab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body{
+            background-color: lightgray;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        main {
+            margin-top: 86px;
+        }
+
+        input {
+            outline: 0;
+            font-family: inherit;
+            font-size: inherit;
+            vertical-align: middle;
+        }
+
+        ul {
+            margin-bottom: 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .pageHeader {
+            position: fixed;
+            z-index: 26;
+            box-shadow: 0 2px 2px 0 rgb(0 0 0 / 10%);
+            border-bottom: 1px solid #ccc;
+            top: 0;
+            width: 100%;
+            height: 56px;
+            background: #fff;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        .overLayer {
+            top: 0;
+            width: 100%;
+            height: 56px;
+            background: #fff;
+            position: absolute;
+            left: 0;
+            margin: 0;
+        }
+
+        .pageWrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: 0 0;
+            position: relative;
+            max-width: 1212px;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .logo {
+            margin-right: 40px;
+        }
+
+        #logo {
+            display: inline-block;
+            width: 132px;
+            height: 35px;
+            background-repeat: no-repeat;
+            background-image: url(./TemplateData/ava.png);
+            background-size: 70% 100%;
+        }
+
+        .navContainer {
+            position: relative;
+            margin-right: auto;
+        }
+
+        .mainMenu {
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .expandingMenuList {
+            font-size: 0;
+        }
+
+            .expandingMenuList > li {
+                position: relative;
+                font-size: 16px;
+            }
+
+                .expandingMenuList > li:before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 100%;
+                    width: 100%;
+                    height: 2px;
+                    background-color: black;
+                    transition: all .25s ease;
+                    transform-origin: top;
+                    transform: scaleY(0);
+                }
+
+                .expandingMenuList > li:hover:before {
+                    transform: scaleY(1);
+                }
+
+        .header-nav_element {
+            font-size: 16px;
+            display: inline-block;
+            list-style: none;
+            vertical-align: middle;
+            margin: 0;
+        }
+
+        .textLogo {
+            color: #444;
+            position: relative;
+            z-index: 1;
+            display: block;
+            cursor: pointer;
+            font-style: italic;
+        }
+
+            .textLogo > span {
+                position: relative;
+                z-index: 1;
+                display: block;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                height: 56px;
+                background: #fff;
+                padding: 1.2em .7em 0;
+            }
+
+        .expandingMenuTrigger {
+            display: none;
+        }
+
+        .choose {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .choose > .input-form {
+                margin: 15px 10px;
+            }
+
+        .disabled {
+            pointer-events: none;
+            opacity: .5;
+        }
+
+            .disabled > a {
+                color: lightgrey;
+            }
+
+        .userInfo_userName {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .userInfo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .userInfo > p:first-child {
+                margin-right: 5px;
+            }
+
+        .users_table {
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: .25rem;
+            margin-left:30px;
+        }
+    </style>
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+</head>
+<body>
+    <header class="pageHeader">
+        <div class="overLayer"></div>
+
+        <div class="pageWrap">
+            <div class="logo">
+                <a onclick="EbaloGeki()" id="logo"></a>
+            </div>
+
+            <div class="navContainer">
+                <nav class="mainMenu ">
+                    <ul class="expandingMenuList">
+                        <li class="header-nav_element playBtn" onclick="StartPlay()">
+                            <a class="textLogo">
+                                <span>Play</span>
+                            </a>
+                        </li>
+                        <li class="header-nav_element" onclick="RulesPlay()">
+                            <a class="textLogo">
+                                <span>Rules</span>
+                            </a>
+                        </li>
+                        <li class="header-nav_element" onclick="StartAbout()">
+                            <a class="textLogo">
+                                <span>News</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="card col-4" style="width: 18rem;">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Username:</h6>
+                        <h5 class="card-title username"></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Email:</h6>
+                        <h5 class="card-title email"></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Rating:</h6>
+                        <h5 class="card-title raiting"></h5>
+                        <button type="button" class="btn btn-warning" onclick="SignOut()">Sign Out</button>
+                        <button type="button" class="btn btn-success adminpan" onclick="AdminCab()">Admin Panel</button>
+                    </div>
+                </div>
+
+                <div class="users_table col-8">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">User Name</th>
+                                <th scope="col">Rating</th>
+                            </tr>
+                        </thead>
+
+                        <tbody></tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script>
+        let token = JSON.parse(localStorage.getItem('token'));
+        let userInfo = parseJwt(token);
+        let userRating;
+        let users = [];
+
+        function getUsers(token) {
+            fetch('https://markianpack.azurewebsites.net/api/rating', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.toString(),
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(data => data.json())
+                .then(users => {
+                    usersSorted = users.sort((a, b)=> b.rating - a.rating);
+
+                    document.querySelector('.table > tbody').innerHTML = '';
+                    for (user of usersSorted) {
+                        let tr = document.createElement('tr');
+
+                        let userInfo =
+                            `
+                                                    <td>${user.username}</td>
+                                                    <td>${user.rating}</td>
+                                                `;
+
+                        tr.innerHTML = userInfo;
+
+                        document.querySelector('.table > tbody').appendChild(tr);
+                    }
+                });
+        }
+
+        getUsers(token);
+
+        const USERNAME = document.querySelector('.username');
+        USERNAME.innerHTML = `<p>${userInfo.userName}</p>`
+
+        const EMAIL = document.querySelector('.email');
+        EMAIL.innerHTML = `<p>${userInfo.email}</p>`
+
+        const RATING = document.querySelector('.raiting');
+
+        function getRating() {
+             fetch(`https://markianpack.azurewebsites.net/api/rating/${userInfo.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.toString(),
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                 .then(response => response.json())
+                 .then(data => {
+                     userRating = data.rating;
+                     RATING.innerHTML = `<p>${userRating}</p>`
+                 });
+
+        }
+
+        getRating()
+            
+
+        function StartPlay() {
+            window.location.replace('./game');
+        }
+
+        function RulesPlay() {
+            window.location.replace('./rules');
+        }
+
+        function StartAbout() {
+            window.location.replace('./news');
+        }
+
+
+        function EbaloGeki() {
+            window.location.replace('./index');
+        }
+
+        function SignOut() {
+            localStorage.removeItem('token');
+            window.location.replace('./index');
+        }
+
+        function AdminCab() {
+            window.location.replace('./admin');
+        }
+
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+
+            return JSON.parse(jsonPayload);
+        };
+
+
+        function UserAdminCheck() {
+            const ADMIN_BTN = document.querySelector('.adminpan');
+
+            if (userInfo.role == "Admin") {
+                ADMIN_BTN.style.display = '';
+            }
+            else {
+                ADMIN_BTN.style.display = 'none';
+            }
+        }
+
+        UserAdminCheck();
+    </script>
+</body>
+</html>
