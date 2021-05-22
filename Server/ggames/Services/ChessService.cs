@@ -30,12 +30,12 @@ namespace ggames.Services
 
         public async Task<bool> UpdateRatingAsync(Guid UserId, int rating)
         {
-            if (rating < 0) rating = 0;
+            
 
 
             var ratingToUpdate = await  GetRatingByUserIdAsync(UserId);
             if (ratingToUpdate == null) return false;
-
+            if (ratingToUpdate.Rating <= 0) rating = 0;
             ratingToUpdate.Rating += rating;
             _appDataContext.ChessRatings.Update(ratingToUpdate);
             var updated = await _appDataContext.SaveChangesAsync();
