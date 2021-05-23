@@ -28,7 +28,7 @@ namespace ggames
         {
             Configuration = configuration;
         }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -82,15 +82,22 @@ namespace ggames
             services.AddHttpClient();
             services.AddSingleton<IFBAuthService, FBAuthService>();
 
-
+            //here
+            
             services.AddCors(opt =>
             {
-                opt.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                });
+                //opt.AddDefaultPolicy(builder =>
+                //{
+                //    builder.AllowAnyOrigin()
+                //    .AllowAnyMethod()
+                //    .AllowAnyHeader();
+                //}),
+                opt.AddPolicy(name: MyAllowSpecificOrigins,
+                             builder =>
+                             {
+                                 builder.WithOrigins("https://markianpack.azurewebsites.net",
+                                                     "https://chesstestsite.azurewebsites.net");
+                             });
             });
 
             services.AddSwaggerGen(c =>
@@ -111,7 +118,7 @@ namespace ggames
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
 
