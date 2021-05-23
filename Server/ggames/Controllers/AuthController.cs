@@ -83,7 +83,7 @@ namespace ggames.Controllers
 
         [Route(ApiRoutes.Auth.FBAuth)]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] UserFBAuthRequest request)
+        public async Task<IActionResult> FBLogin([FromBody] UserFBAuthRequest request)
         {
             var authResponse = await _authService.LoginWithFacebookAsync(request.accessToken);
             if (!authResponse.Success)

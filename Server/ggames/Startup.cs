@@ -86,12 +86,12 @@ namespace ggames
             
             services.AddCors(opt =>
             {
-                //opt.AddDefaultPolicy(builder =>
-                //{
-                //    builder.AllowAnyOrigin()
-                //    .AllowAnyMethod()
-                //    .AllowAnyHeader();
-                //}),
+                opt.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
                 opt.AddPolicy(name: MyAllowSpecificOrigins,
                              builder =>
                              {
