@@ -118,7 +118,7 @@ namespace ggames
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -35,7 +35,7 @@ namespace ggames.Services
 
             var ratingToUpdate = await  GetRatingByUserIdAsync(UserId);
             if (ratingToUpdate == null) return false;
-            if (ratingToUpdate.Rating <= 0) rating = 0;
+            if (ratingToUpdate.Rating <= 0 && rating<=0) rating = 0;
             ratingToUpdate.Rating += rating;
             _appDataContext.ChessRatings.Update(ratingToUpdate);
             var updated = await _appDataContext.SaveChangesAsync();
