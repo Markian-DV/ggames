@@ -9,9 +9,6 @@ namespace ggames.Helpers
     {
         public const string Root = "api";
 
-        
-
-
         public static class Users
         {
             public const string GetAll = Root + "/users";

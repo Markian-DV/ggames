@@ -13,7 +13,6 @@ namespace ggames.Data
         public AppDataContext(DbContextOptions<AppDataContext> options) : base(options) { }
 
         public DbSet<ChessRating> ChessRatings { get; set; }
-
-
+        public DbSet<Article> Articles { get; set; }
     }
 }
